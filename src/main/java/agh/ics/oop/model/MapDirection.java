@@ -4,13 +4,18 @@ import java.util.Random;
 
 public enum MapDirection {
     NORTH,
-    SOUTH,
-    WEST,
-    EAST,
-    NORTH_WEST,
     NORTH_EAST,
+    EAST,
+    SOUTH_EAST,
+    SOUTH,
     SOUTH_WEST,
-    SOUTH_EAST,;
+    WEST,
+    NORTH_WEST,
+;
+
+    public MapDirection turn(int direction) {
+        return MapDirection.values()[(this.ordinal() + direction) % MapDirection.values().length];
+    }
 
     public String toString() {
         return switch (this) {

@@ -13,9 +13,6 @@ public record Configuration(
         int minMutations,
         int maxMutations,
         int genomeLength,
-
-        // Te 3 raczej nie będą int
         int mapVariant,
-        int plantVariant,
         int animalVariant
 ) {}
