@@ -10,11 +10,9 @@ public class AnimalStats {
     private int age = 0;
     private int dateOfDeath;
     private boolean alive = true;
-    private List<Integer> genome;
 
-    public AnimalStats(int energy, List<Integer> genome) {
+    public AnimalStats(int energy) {
         this.energy = energy;
-        this.genome = genome;
     }
 
     public int getEnergy() {
@@ -53,12 +51,6 @@ public class AnimalStats {
     public void kill(int date) {
         this.alive = false;
         this.dateOfDeath = date;
-    }
-    public List<Integer> getGenome() {
-        return genome;
-    }
-    public void setGenome(List<Integer> genome) {
-        this.genome = genome;
     }
 }
 
