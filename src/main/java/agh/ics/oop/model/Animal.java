@@ -4,15 +4,27 @@ public class Animal implements WorldElement {
 
     private MapDirection direction;
     private Vector2d position;
+    private int energy;
+    private final Genotype genotype;
+    private final WorldMap map;
+    private int age = 0;
+    private int children;
+    private boolean alive = true;
 
-    public Animal(){
-        this.direction = MapDirection.NORTH;
-        this.position = new Vector2d(2,2);
+    public Animal(WorldMap map, Vector2d startPosition, int startEnergy){
+        this.direction = MapDirection.randomDirection();
+        this.position = startPosition;
+        this.energy = startEnergy;
+        this.genotype = new Genotype();
+        this.map = map;
     }
 
-    public Animal(Vector2d vector2d){
-        this.position = vector2d;
-        this.direction = MapDirection.NORTH;
+    public Animal(WorldMap map, Vector2d startPosition, int startEnergy, Genotype fatherGenotype, Genotype motherGenotype){
+        this.direction = MapDirection.randomDirection();
+        this.position = startPosition;
+        this.energy = startEnergy;
+        this.genotype = new Genotype(fatherGenotype, motherGenotype);
+        this.map = map;
     }
 
     @Override
@@ -22,6 +34,34 @@ public class Animal implements WorldElement {
 
     public MapDirection getDirection(){
         return this.direction;
+    }
+
+    public void death(){
+        this.alive = false;
+    }
+
+    public int getEnergy(){
+        return this.energy;
+    }
+
+    public int getChildren(){
+        return this.children;
+    }
+
+    public int getAge(){
+        return this.age;
+    }
+
+    public void eating(int plantEnergy){
+        this.energy += plantEnergy;
+    }
+
+    public void breeding() {
+
+    }
+
+    public Genotype getGenotype() {
+        return genotype;
     }
 
     @Override
