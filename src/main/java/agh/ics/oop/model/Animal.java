@@ -1,44 +1,40 @@
 package agh.ics.oop.model;
 
-import java.util.Random;
+import javax.swing.*;
+import java.util.*;
+
 public class Animal implements WorldElement {
 
-    private MapDirection direction;
+    private int direction;
     private Vector2d position;
     private AnimalStats statistics;
-    private int activeGene = 0;
     private final Genotype genotype;
 
 
-    public Animal(Vector2d startPosition, int startEnergy){
-        this.direction = MapDirection.randomDirection();
+    /*public Animal(Vector2d startPosition, int startEnergy){
+        this.direction =  new Random().nextInt(8);
         this.position = startPosition;
         this.statistics = new AnimalStats(startEnergy);
         this.genotype = new Genotype();
-    }
+    }*/
 
-    public Animal(Vector2d startPosition, int startEnergy, Genotype fatherGenotype, Genotype motherGenotype){
-        this.direction = MapDirection.randomDirection();
+    public Animal(Vector2d startPosition, int startEnergy, Genotype genotype){
+        this.direction =  new Random().nextInt(8);
         this.position = startPosition;
         this.statistics = new AnimalStats(startEnergy);
-        this.genotype = new Genotype(fatherGenotype, motherGenotype);
+        this.genotype = genotype;
     }
 
     public int getEnergy( ) {return statistics.getEnergy();}
     public int getChildren( ) {return statistics.getChildren();}
     public int getAge( ) {return statistics.getAge();}
 
-    public Genotype getGenotype() {return statistics.getGenotype();}
+    public List<Integer> getGenotype() {return genotype.getGenes();}
 
 
     @Override
     public Vector2d getPosition(){
         return this.position;
-    }
-
-    @Override
-    public String toString(){
-        return this.direction.toString();
     }
 
     public Boolean isAt(Vector2d vector2d)
@@ -51,29 +47,38 @@ public class Animal implements WorldElement {
         statistics.changeEnergy(plantEnergy);}
 
 
-    public void move(MoveDirection otherDirection, WorldMap map){
-        Vector2d newPosition = this.position;
+    public void move() {
+        int[] dx = {-1, 0, 1, 1, 1, 0, -1, -1};
+        int[] dy = {-1, -1, -1, 0, 1, 1, 1, 0};
 
-        switch(otherDirection){
-            case RIGHT:
-                this.direction = this.direction.next();
-                return;
-            case LEFT:
-                this.direction = this.direction.previous();
-                return;
-            case FORWARD:
-                newPosition = this.position.add(this.direction.toUnitVector());
-                break;
-            case BACKWARD:
-                newPosition = this.position.add(this.direction.toUnitVector().opposite());
-                break;
-            default:
-                return;
+        int moveDirection = (direction + genotype.getActiveGene()) % 8;
+        this.position = new Vector2d(position.getX() + dx[moveDirection], position.getY() + dy[moveDirection]);
 
-            if (map.canMoveTo(newPosition)) {
-                this.position = newPosition;
-            }
-        }
+
+        genotype.moveToNextGene();
+        statistics.incrementAge();
     }
 
+    public boolean canReproduce(int reproductionCost) {
+        return statistics.getEnergy() >= reproductionCost;
+    }
+
+    public void reproduce(Animal partner, int reproductionCost) {
+        if (canReproduce(reproductionCost) && partner.canReproduce(reproductionCost)) {
+            int energyToChild = statistics.getEnergy() / 4;
+            statistics.setEnergy(statistics.getEnergy() - energyToChild);
+            partner.statistics.setEnergy(partner.getEnergy() - energyToChild);
+
+            int splitPoint = (int) ((statistics.getEnergy() / (double) (statistics.getEnergy() + partner.statistics.getEnergy())) * genotype.getGenes().size());
+            List<Integer> childGenes = new ArrayList<>();
+            childGenes.addAll(genotype.getGenes().subList(0, splitPoint));
+            childGenes.addAll(partner.genotype.getGenes().subList(splitPoint, partner.genotype.getGenes().size()));
+
+            Genotype childGenotype = new Genotype(childGenes);
+            Animal child = new Animal(position, energyToChild, childGenotype);
+
+            statistics.incrementDescendants();
+            partner.statistics.incrementDescendants();
+        }
+    }
 }

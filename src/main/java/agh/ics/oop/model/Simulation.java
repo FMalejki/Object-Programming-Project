@@ -10,7 +10,7 @@ public class Simulation implements Runnable{
 
     private final WorldMap worldMap;
     private final Configuration config;
-    private final GameStats gameStats;
+    //private final GameStats gameStats;
 
     public Simulation(Configuration config) {
         this.config = config;
@@ -29,7 +29,8 @@ public class Simulation implements Runnable{
             for (int j = 0; j < config.genomeLength(); j++) {
                 genome.add(rand.nextInt(8));
             }
-            Animal animal = new Animal(position, config.startingEnergyAmount(), genome);
+            Genotype genotype = new Genotype(genome);
+            Animal animal = new Animal(position, config.startingEnergyAmount(), genotype);
             worldMap.placeAnimal(animal);
         }
 

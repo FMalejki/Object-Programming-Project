@@ -18,6 +18,9 @@ public class AnimalStats {
     public int getEnergy() {
         return energy;
     }
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
     public void changeEnergy(int energy) {
         this.energy += energy;
     }
