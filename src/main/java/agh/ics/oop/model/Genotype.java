@@ -27,4 +27,8 @@ class Genotype {
     public List<Integer> getGenes() {
         return genes;
     }
+
+    public void mutate() {
+
+    }
 }

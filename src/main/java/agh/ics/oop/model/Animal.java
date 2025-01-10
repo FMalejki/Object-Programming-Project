@@ -11,13 +11,6 @@ public class Animal implements WorldElement {
     private final Genotype genotype;
 
 
-    /*public Animal(Vector2d startPosition, int startEnergy){
-        this.direction =  new Random().nextInt(8);
-        this.position = startPosition;
-        this.statistics = new AnimalStats(startEnergy);
-        this.genotype = new Genotype();
-    }*/
-
     public Animal(Vector2d startPosition, int startEnergy, Genotype genotype){
         this.direction =  new Random().nextInt(8);
         this.position = startPosition;
@@ -25,9 +18,9 @@ public class Animal implements WorldElement {
         this.genotype = genotype;
     }
 
-    public int getEnergy( ) {return statistics.getEnergy();}
-    public int getChildren( ) {return statistics.getChildren();}
-    public int getAge( ) {return statistics.getAge();}
+    public int getEnergy() {return statistics.getEnergy();}
+    public int getChildren() {return statistics.getChildren();}
+    public int getAge() {return statistics.getAge();}
 
     public List<Integer> getGenotype() {return genotype.getGenes();}
 
@@ -63,7 +56,7 @@ public class Animal implements WorldElement {
         return statistics.getEnergy() >= reproductionCost;
     }
 
-    public void reproduce(Animal partner, int reproductionCost) {
+    public void reproduce(Animal partner, int reproductionCost, int minMutations, int maxMutations) {
         if (canReproduce(reproductionCost) && partner.canReproduce(reproductionCost)) {
             int energyToChild = statistics.getEnergy() / 4;
             statistics.setEnergy(statistics.getEnergy() - energyToChild);
@@ -73,6 +66,13 @@ public class Animal implements WorldElement {
             List<Integer> childGenes = new ArrayList<>();
             childGenes.addAll(genotype.getGenes().subList(0, splitPoint));
             childGenes.addAll(partner.genotype.getGenes().subList(splitPoint, partner.genotype.getGenes().size()));
+
+            Random random = new Random();
+            int mutationsCount = random.nextInt(maxMutations) + minMutations;
+            for (int i = 0; i < mutationsCount; i++) {
+                int mutationIndex = random.nextInt(childGenes.size());
+                childGenes.set(mutationIndex, random.nextInt(8));
+            }
 
             Genotype childGenotype = new Genotype(childGenes);
             Animal child = new Animal(position, energyToChild, childGenotype);
