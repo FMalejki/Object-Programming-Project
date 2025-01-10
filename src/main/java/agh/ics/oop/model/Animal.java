@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import javax.swing.*;
 import java.util.*;
 
 public class Animal implements WorldElement {
