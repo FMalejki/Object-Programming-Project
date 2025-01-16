@@ -32,6 +32,8 @@ public abstract class AbstractWorldMap implements WorldMap {
         return candidates;
     }
 
+
+
     public void placeAnimal(Animal animal) {
         Vector2d position = animal.getPosition();
         if (!animals.containsKey(position)) {
