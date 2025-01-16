@@ -55,8 +55,8 @@ public class Animal implements WorldElement {
         return statistics.getEnergy() >= reproductionCost;
     }
 
-    public void reproduce(Animal partner, int reproductionCost, int minMutations, int maxMutations) {
-        if (canReproduce(reproductionCost) && partner.canReproduce(reproductionCost)) {
+    public void reproduce(Animal partner, int energyThreshold, int reproductionCost, int minMutations, int maxMutations) {
+        if (canReproduce(energyThreshold) && partner.canReproduce(energyThreshold)) {
             int energyToChild = statistics.getEnergy() / 4;
             statistics.setEnergy(statistics.getEnergy() - energyToChild);
             partner.statistics.setEnergy(partner.getEnergy() - energyToChild);
