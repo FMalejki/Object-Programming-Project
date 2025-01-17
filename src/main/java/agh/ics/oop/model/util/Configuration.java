@@ -13,6 +13,6 @@ public record Configuration(
         int minMutations,
         int maxMutations,
         int genomeLength,
-        int mapVariant,
-        int animalVariant
+        String mapVariant,
+        String animalVariant
 ) {}

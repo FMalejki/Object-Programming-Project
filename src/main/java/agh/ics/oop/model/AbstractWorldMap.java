@@ -12,14 +12,24 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Set<Vector2d> preferredPlantSpots = new HashSet<>();
     protected final Set<Vector2d> neutralPlantSpots = new HashSet<>();
     protected final List<Animal> deadAnimals = new ArrayList<>();
+    protected final GamePresenter presenter;
 
 
-    public AbstractWorldMap(int width, int height) {
+    public AbstractWorldMap(int width, int height, GamePresenter presenter) {
         this.boundary = new Boundary(new Vector2d(0, 0), new Vector2d(width -1, height -1));
+        this.presenter = presenter;
     }
 
     public Boundary getBoundary() {
         return boundary;
+    }
+
+    public boolean hasPlant(Vector2d pos) {
+        return plants.containsKey(pos);
+    }
+
+    public Animal animalAt(Vector2d pos) {
+        return (!animals.containsKey(pos)) ? null : prioritizeAnimals(pos).getFirst();
     }
 
     //TODO jeśli getChildren nie rozstrzygnie, trzeba brać losowe
@@ -50,30 +60,37 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.remove(position);
             }
         }
+        mapChanged();
     }
 
     //Przy założeniu, że ruch pobiera 1 energii
     public void moveAnimals() {
         List<Animal> newPositions = new ArrayList<>();
+        List<Vector2d> toRemoveFields = new ArrayList<>();
         for (List<Animal> oneField : animals.values()) {
+            Vector2d position = oneField.get(0).getPosition();
+            List<Animal> toRemoveAnimals = new ArrayList<>();
             for (Animal animal : oneField) {
                 if (animal.getEnergy() > 0) {
-                    Vector2d position = animal.getPosition();
                     animal.move();
                     newPositions.add(animal);
-                    oneField.remove(animal);
-                    if (oneField.isEmpty()) {
-                        animals.remove(position);
-                    }
+                    toRemoveAnimals.add(animal);
                 }
                 else {
                     deadAnimals.add(animal);
                 }
             }
+            oneField.removeAll(toRemoveAnimals);
+            if (oneField.isEmpty()) {
+                toRemoveFields.add(position);
+            }
         }
+        toRemoveFields.forEach(animals.keySet()::remove);
+
         for (Animal animal : newPositions) {
             this.placeAnimal(animal);
         }
+        mapChanged();
     }
 
     public void eatPlants(int energyFromEating) {
@@ -84,6 +101,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 removePlant(position);
             }
         }
+        mapChanged();
     }
 
     public abstract void removePlant(Vector2d position);
@@ -101,4 +119,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public abstract void growPlants(int amount);
 
+    private void mapChanged() {
+        presenter.mapChanged();
+    }
 }
