@@ -12,10 +12,9 @@ public class Simulation implements Runnable{
     private final Configuration config;
     //private final GameStats gameStats;
 
-    public Simulation(Configuration config) {
+    public Simulation(Configuration config, WorldMap worldMap) {
         this.config = config;
-        this.worldMap = (config.mapVariant() == 0) ? new BasicMap(config.width(), config.height()) :
-                        new JungleMap(config.width(), config.height());
+        this.worldMap = worldMap;
     }
 
     private void initializeAnimals() {

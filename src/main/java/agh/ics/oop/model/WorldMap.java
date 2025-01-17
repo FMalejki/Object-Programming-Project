@@ -13,5 +13,7 @@ public interface WorldMap {
     public void reproduceAnimals(int energyForReproduction, int reproductionCost, int minMutations, int maxMutations);
     public abstract void growPlants(int amount);
     public Boundary getBoundary();
+    public boolean hasPlant(Vector2d pos);
+    public Animal animalAt(Vector2d pos);
 
 }

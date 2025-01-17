@@ -8,8 +8,8 @@ public class BasicMap extends AbstractWorldMap {
 
     private Boundary jungleBonds;
 
-    public BasicMap(int width, int height) {
-        super(width, height);
+    public BasicMap(int width, int height, GamePresenter presenter) {
+        super(width, height, presenter);
         this.initializeJungle();
     }
 
