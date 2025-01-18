@@ -12,10 +12,11 @@ class JungleMapTest {
     private JungleMap jungleMap;
     private final int width = 10;
     private final int height = 10;
+    private final GamePresenter observer = new GamePresenter();
 
     @BeforeEach
     void setUp() {
-        jungleMap = new JungleMap(width, height);
+        jungleMap = new JungleMap(width, height, observer);
     }
 
     @Test

@@ -106,14 +106,14 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public abstract void removePlant(Vector2d position);
 
-    public void reproduceAnimals(int energyForReproduction, int energyThreshold, int reproductionCost, int minMutations, int maxMutations) {
+    /*public void reproduceAnimals(int energyForReproduction, int energyThreshold, int reproductionCost, int minMutations, int maxMutations) {
         for (Vector2d position : animals.keySet()) {
             if (animals.get(position).size() >= 2) {
                 List<Animal> couple = animals.get(position).size() == 2 ? animals.get(position) : prioritizeAnimals(position).subList(0, 2);
                 couple.get(0).reproduce(couple.get(1), energyThreshold, reproductionCost, minMutations, maxMutations);
             }
         }
-    }
+    }*/
 
     public abstract boolean isPreferred(Vector2d position);
 

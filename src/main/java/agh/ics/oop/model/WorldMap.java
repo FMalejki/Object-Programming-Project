@@ -10,7 +10,7 @@ public interface WorldMap {
     public void removeDeadAnimals();
     public void moveAnimals();
     public void eatPlants(int energyFromEating);
-    public void reproduceAnimals(int energyForReproduction, int reproductionCost, int minMutations, int maxMutations);
+    //public void reproduceAnimals(int energyForReproduction, int reproductionCost, int minMutations, int maxMutations);
     public abstract void growPlants(int amount);
     public Boundary getBoundary();
     public boolean hasPlant(Vector2d pos);

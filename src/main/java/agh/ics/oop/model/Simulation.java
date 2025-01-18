@@ -45,7 +45,7 @@ public class Simulation implements Runnable{
             worldMap.removeDeadAnimals();
             worldMap.moveAnimals();
             worldMap.eatPlants(config.energyFromEating());
-            worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
+            //worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
             worldMap.growPlants(config.plantsPerDay());
         }
     }

@@ -8,10 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class BasicMapTest {
 
     private BasicMap basicMap;
+    private GamePresenter gamePresenter= new GamePresenter();
 
     @BeforeEach
     void setUp() {
-        basicMap = new BasicMap(10, 10);
+        basicMap = new BasicMap(10, 10, gamePresenter);
     }
 
     @Test
