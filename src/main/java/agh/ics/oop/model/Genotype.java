@@ -33,7 +33,7 @@ class Genotype {
         return genes.get(activeGeneIndex);
     }
 
-    public void moveToNextGene() {
+    public void moveToNextGeneCreazy() {
         if (new Random().nextInt(100) < 80) {
             activeGeneIndex = (activeGeneIndex + 1) % genes.size();
         } else {
@@ -41,11 +41,20 @@ class Genotype {
         }
     }
 
+    public void moveToNextGene(){
+        activeGeneIndex = (activeGeneIndex + 1) % genes.size();
+    }
+
     public List<Integer> getGenes() {
         return genes;
     }
 
-    public void mutate() {
-
+    public void mutate(int maxMutations, int minMutations) {
+        Random random = new Random();
+        int mutationsCount = random.nextInt(maxMutations) + minMutations;
+        for (int i = 0; i < mutationsCount; i++) {
+            int mutationIndex = random.nextInt(this.getGenes().size());
+            this.genes.set(mutationIndex, random.nextInt(8));
+        }
     }
 }

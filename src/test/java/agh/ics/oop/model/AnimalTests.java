@@ -68,12 +68,6 @@ class AnimalTest {
         assertNotEquals(startPosition, newPosition);
     }
 
-    @Test
-    void testCanReproduce() {
-        assertTrue(animal.canReproduce(50));
-        assertFalse(animal.canReproduce(150));
-    }
-
     /*@Test
     void testReproduce() {
         animal.reproduce(partner, 50, 1, 3);

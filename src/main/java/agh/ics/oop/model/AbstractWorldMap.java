@@ -32,6 +32,14 @@ public abstract class AbstractWorldMap implements WorldMap {
         return (!animals.containsKey(pos)) ? null : prioritizeAnimals(pos).getFirst();
     }
 
+    //TODO:
+    private Vector2d checkPlacementOnMap(Vector2d animalPosition, Boundary boundary) {
+        System.out.print("TODO");
+        //przesunac animala tam gdzie trzeba
+        //use moveToSpecificPoint
+        return new Vector2d(animalPosition.getX(), animalPosition.getY());
+    }
+
     //TODO jeśli getChildren nie rozstrzygnie, trzeba brać losowe
     public List<Animal> prioritizeAnimals(Vector2d location) {
         List<Animal> candidates = animals.get(location);
@@ -106,14 +114,17 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public abstract void removePlant(Vector2d position);
 
-    /*public void reproduceAnimals(int energyForReproduction, int energyThreshold, int reproductionCost, int minMutations, int maxMutations) {
+    public void reproduceAnimals(int energyThreshold, int reproductionCost, int minMutations, int maxMutations) {
         for (Vector2d position : animals.keySet()) {
             if (animals.get(position).size() >= 2) {
                 List<Animal> couple = animals.get(position).size() == 2 ? animals.get(position) : prioritizeAnimals(position).subList(0, 2);
-                couple.get(0).reproduce(couple.get(1), energyThreshold, reproductionCost, minMutations, maxMutations);
+                if(couple.get(0).canReproduce(energyThreshold) && couple.get(1).canReproduce(energyThreshold)) {
+                    Animal child = couple.get(0).reproduce(couple.get(1), reproductionCost, minMutations, maxMutations);
+                    this.placeAnimal(child);
+                }
             }
         }
-    }*/
+    }
 
     public abstract boolean isPreferred(Vector2d position);
 

@@ -24,11 +24,7 @@ public class Simulation implements Runnable{
 
         for (int i = 0; i < config.startingAnimalCount(); i++) {
             Vector2d position = new Vector2d(rand.nextInt(width), rand.nextInt(height));
-            ArrayList<Integer> genome = new ArrayList<>();
-            for (int j = 0; j < config.genomeLength(); j++) {
-                genome.add(rand.nextInt(8));
-            }
-            Genotype genotype = new Genotype(genome);
+            Genotype genotype = new Genotype(config.genomeLength());
             Animal animal = new Animal(position, config.startingEnergyAmount(), genotype);
             worldMap.placeAnimal(animal);
         }
@@ -45,7 +41,7 @@ public class Simulation implements Runnable{
             worldMap.removeDeadAnimals();
             worldMap.moveAnimals();
             worldMap.eatPlants(config.energyFromEating());
-            //worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
+            worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
             worldMap.growPlants(config.plantsPerDay());
         }
     }
