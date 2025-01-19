@@ -32,7 +32,6 @@ public class Simulation implements Runnable{
 
     }
 
-    //TODO zmienić true na sensowny warunek w while
     @Override
     public void run() {
         initializeAnimals();

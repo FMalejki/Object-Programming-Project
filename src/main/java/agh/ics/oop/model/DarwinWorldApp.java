@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class DarwinWorldApp extends Application {
+
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("GameMenu.fxml"));
@@ -25,5 +26,9 @@ public class DarwinWorldApp extends Application {
         primaryStage.setTitle("Darwin World");
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+        primaryStage.setOnCloseRequest(event -> {
+            System.exit(0);
+        });
+
     }
 }

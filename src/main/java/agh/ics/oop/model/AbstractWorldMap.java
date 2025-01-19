@@ -32,21 +32,34 @@ public abstract class AbstractWorldMap implements WorldMap {
         return (!animals.containsKey(pos)) ? null : prioritizeAnimals(pos).getFirst();
     }
 
-    //TODO:
-    private Vector2d checkPlacementOnMap(Vector2d animalPosition, Boundary boundary) {
-        System.out.print("TODO");
-        //przesunac animala tam gdzie trzeba
-        //use moveToSpecificPoint
-        return new Vector2d(animalPosition.getX(), animalPosition.getY());
+    protected Vector2d checkPlacementOnMap(Vector2d animalPosition) {
+        if(animalPosition.getX() < this.boundary.start().getX()){
+            animalPosition = new Vector2d(this.boundary.end().getX(), animalPosition.getY());
+        }
+        if(animalPosition.getY() < this.boundary.start().getY()){
+            animalPosition = new Vector2d(animalPosition.getX(), this.boundary.end().getY());
+        }
+        if(animalPosition.getX() > this.boundary.end().getX()){
+            animalPosition = new Vector2d(this.boundary.start().getX(), animalPosition.getY());
+        }
+        if(animalPosition.getY() > this.boundary.end().getY()){
+            animalPosition = new Vector2d(animalPosition.getX(), this.boundary.start().getY());
+        }
+        return animalPosition;
     }
 
-    //TODO jeśli getChildren nie rozstrzygnie, trzeba brać losowe
     public List<Animal> prioritizeAnimals(Vector2d location) {
         List<Animal> candidates = animals.get(location);
+
         candidates.sort(Comparator.comparing(Animal::getEnergy)
-                                  .thenComparing(Animal::getAge)
-                                  .thenComparing(Animal::getChildren)
-                                  .reversed());
+                .thenComparing(Animal::getAge)
+                .thenComparing(Animal::getChildren)
+                .reversed());
+
+        if (candidates.stream().distinct().count() == 1) {
+            Collections.shuffle(candidates);
+        }
+
         return candidates;
     }
 
@@ -81,6 +94,7 @@ public abstract class AbstractWorldMap implements WorldMap {
             for (Animal animal : oneField) {
                 if (animal.getEnergy() > 0) {
                     animal.move();
+                    animal.moveToSpecificPoint(checkPlacementOnMap(animal.getPosition()));
                     newPositions.add(animal);
                     toRemoveAnimals.add(animal);
                 }
