@@ -10,14 +10,14 @@ public class Simulation implements Runnable{
 
     private final WorldMap worldMap;
     private final Configuration config;
-    //private final GameStats gameStats;
+    private final GameStats gameStats;
     private boolean running = false;
 
     public Simulation(Configuration config, WorldMap worldMap) {
         this.config = config;
         this.worldMap = worldMap;
         initializeAnimals();
-        worldMap.growPlants(config.startingPlantCount());
+        gameStats = calculateGameStats();
     }
 
     private void initializeAnimals() {
@@ -31,8 +31,6 @@ public class Simulation implements Runnable{
             Animal animal = new Animal(position, config.startingEnergyAmount(), genotype);
             worldMap.placeAnimal(animal);
         }
-
-
     }
 
     public void switchPause() {
@@ -43,20 +41,62 @@ public class Simulation implements Runnable{
         running = false;
     }
 
+    private void removeDead() {
+        worldMap.removeDeadAnimals();
+        gameStats.updateAvgLifespan(worldMap.avgLifespan());
+        gameStats.updateFreeFields(worldMap.countFreeFields());
+        worldMap.statsChanged(gameStats.toString());
+    }
+    private void move() {
+        worldMap.moveAnimals();
+        gameStats.updateFreeFields(worldMap.countFreeFields());
+        gameStats.updateAvgEnergy(worldMap.totalEnergy());
+        worldMap.statsChanged(gameStats.toString());
+    }
+    private void eat() {
+        worldMap.eatPlants(config.energyFromEating());
+        gameStats.updateAvgEnergy(worldMap.totalEnergy());
+        gameStats.updateAllPlants(worldMap.countPlants());
+        worldMap.statsChanged(gameStats.toString());
+    }
+    private void reproduce() {
+        worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
+        gameStats.updateAllAnimals(worldMap.countAnimals());
+        gameStats.updateAvgChildren(worldMap.totalChildren());
+        gameStats.updateGenotypes(worldMap.getPopularGenotypes());
+        worldMap.statsChanged(gameStats.toString());
+    }
+    private void grow() {
+        worldMap.growPlants(config.plantsPerDay());
+        gameStats.updateAllPlants(worldMap.countPlants());
+        gameStats.updateFreeFields(worldMap.countFreeFields());
+        worldMap.statsChanged(gameStats.toString());
+    }
+
     @Override
     public void run() {
         while (running) {
-            System.out.println("xd");
-            worldMap.removeDeadAnimals();
-            worldMap.moveAnimals();
-            worldMap.eatPlants(config.energyFromEating());
-            worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
-            worldMap.growPlants(config.plantsPerDay());
+            removeDead();
+            move();
+            eat();
+            reproduce();
+            grow();
+            worldMap.incrementDay();
             try {
-                Thread.sleep(500);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private GameStats calculateGameStats() {
+        return new GameStats(worldMap.countAnimals(),
+                             worldMap.countPlants(),
+                             worldMap.countFreeFields(),
+                             worldMap.totalEnergy(),
+                             worldMap.avgLifespan(),
+                             worldMap.totalChildren(),
+                             worldMap.getPopularGenotypes());
     }
 }

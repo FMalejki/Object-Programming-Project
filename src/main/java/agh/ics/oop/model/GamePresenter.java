@@ -8,12 +8,17 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GamePresenter {
 
@@ -27,12 +32,17 @@ public class GamePresenter {
     private Button showPreferredByPlants;
     @FXML
     private Button showDominatingGenotype;
+    @FXML
+    private TextArea generalStats;
+    @FXML
+    private TextArea trackedStats;
 
     private WorldMap worldMap;
     private Configuration config;
     private boolean paused = false;
     private Thread gameThread;
     private Simulation simulation;
+    private Animal trackedAnimal = null;
 
 
     public GamePresenter() {
@@ -62,7 +72,7 @@ public class GamePresenter {
     }
 
     private void clearGrid() {
-        mapGrid.getChildren().clear(); // hack to retain visible grid lines
+        mapGrid.getChildren().clear();
     }
 
     private double getCellSize() {
@@ -70,11 +80,25 @@ public class GamePresenter {
         double paneHeight = borderPane.getHeight();
         int width = config.width();
         int height = config.height();
-        return Math.min((paneWidth-200)/width, (paneHeight-50)/height);
+        return Math.min((paneWidth-300)/width, (paneHeight-50)/height);
+    }
+
+    private void resetTrackingText() {
+        trackedStats.setText("Select an animal to track");
+    }
+
+    public void trackAnimal(Animal animal) {
+        if (trackedAnimal == animal) {
+            trackedAnimal = null;
+            Platform.runLater(this::resetTrackingText);
+        }
+        else {
+            trackedAnimal = animal;
+        }
     }
 
     private StackPane drawMapCell(boolean plant, Animal animal) {
-        StackPane cell = new StackPane();
+        StackPane cell = new ExtendedStackPane(animal, this);
         double size = getCellSize();
         cell.setMinWidth(size);
         cell.setMinHeight(size);
@@ -89,6 +113,9 @@ public class GamePresenter {
             circle.setCenterX(size/2);
             circle.setCenterY(0.8*size/2);
             circle.setRadius(0.75*size/2);
+            if (animal == trackedAnimal) {
+                circle.setFill(Color.PINK);
+            }
             Rectangle rectangle = new Rectangle();
             adjustEnergyBar(rectangle, animal.getEnergy(), size);
             cell.getChildren().addAll(circle, rectangle);
@@ -145,9 +172,16 @@ public class GamePresenter {
     }
 
     public void onClickShowPreferredByPlants() {
+        Set<Vector2d> preferredByPlants = worldMap.getPreferredPlantSpots();
+        preferredByPlants.stream().map(pos -> mapGrid.getChildren().get(pos.getX() * config.height() + pos.getY())).map(cell -> (ExtendedStackPane) cell).forEach(cell -> cell.setStyle("-fx-background-color: #57811f"));
 
     }
     public void onClickShowDominatingGenotype() {
-
+        Set<Vector2d> positions = worldMap.dominatingGenotypePos();
+        positions.stream().map(pos -> mapGrid.getChildren().get(pos.getX() * config.height() + pos.getY())).map(cell -> (Circle) (((ExtendedStackPane) cell).getChildren().get(0))).forEach(circle -> {circle.setFill(javafx.scene.paint.Color.CYAN);});
+    }
+    public void statsChanged(String gStats) {
+        Platform.runLater(() -> {generalStats.setText(gStats);
+                                 if (trackedAnimal!=null) {trackedStats.setText(trackedAnimal.toString());}});
     }
 }

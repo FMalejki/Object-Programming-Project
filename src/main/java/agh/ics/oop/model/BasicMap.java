@@ -53,6 +53,7 @@ public class BasicMap extends AbstractWorldMap {
         else {
             neutralPlantSpots.add(position);
         }
+        mapChanged();
     }
 
     @Override
@@ -70,5 +71,6 @@ public class BasicMap extends AbstractWorldMap {
                 preferredPlantSpots.remove(position);
             }
         }
+        mapChanged();
     }
 }

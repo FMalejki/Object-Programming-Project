@@ -37,6 +37,9 @@ public class JungleMap extends AbstractWorldMap{
     public void removePlant(Vector2d position) {
         List<Vector2d> surroundings = getSurroundings(position);
         plants.remove(position);
+        if (nearPlants.containsKey(position) && nearPlants.get(position) == 1){
+            nearPlants.remove(position);
+        }
         for (Vector2d field : surroundings){
             if (nearPlants.get(field) == 1){
                 nearPlants.remove(field);
@@ -54,13 +57,15 @@ public class JungleMap extends AbstractWorldMap{
     }
     private void addPlants(List<Vector2d> positions){
         for (Vector2d position : positions) {
-            if (!preferredPlantSpots.contains(position)) {
+            if (isPreferred(position)){
+                nearPlants.replace(position, nearPlants.get(position) + 1);
+            }
+            else if (!isPreferred(position) && plants.containsKey(position)) {
+                nearPlants.put(position, 1);
+            }
+            else {
                 preferredPlantSpots.add(position);
                 neutralPlantSpots.remove(position);
-            }
-            if (nearPlants.containsKey(position)) {
-                nearPlants.replace(position, nearPlants.get(position) + 1);
-            } else {
                 nearPlants.put(position, 1);
             }
         }
@@ -84,5 +89,13 @@ public class JungleMap extends AbstractWorldMap{
             }
 
         }
+        mapChanged();
+    }
+
+    @Override
+    public Set<Vector2d> preferredSpots() {
+        Set<Vector2d> preferredSpots = super.preferredSpots();
+//        preferredSpots.removeAll(plants.keySet());
+        return preferredSpots;
     }
 }

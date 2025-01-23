@@ -51,6 +51,9 @@ public class AnimalStats {
     public boolean isAlive() {
         return alive;
     }
+    public int getDateOfDeath() {
+        return dateOfDeath;
+    }
     public void kill(int date) {
         this.alive = false;
         this.dateOfDeath = date;

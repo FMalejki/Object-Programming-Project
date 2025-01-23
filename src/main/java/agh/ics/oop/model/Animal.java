@@ -9,6 +9,7 @@ public class Animal implements WorldElement {
     protected Vector2d position;
     protected AnimalStats statistics;
     protected final Genotype genotype;
+    protected final List<Animal> parents = new ArrayList<>();
 
 
     public Animal(Vector2d startPosition, int startEnergy, Genotype genotype){
@@ -21,8 +22,15 @@ public class Animal implements WorldElement {
     public int getEnergy() {return statistics.getEnergy();}
     public int getChildren() {return statistics.getChildren();}
     public int getAge() {return statistics.getAge();}
+    private void incrementDescendants() {
+        statistics.incrementDescendants();
+    }
     public List<Integer> getGenotype() {return genotype.getGenes();}
-
+    public void die(int deathDate) {
+        statistics.kill(deathDate);
+    }
+    public boolean isAlive() {return statistics.isAlive();}
+    public AnimalStats getStats() {return statistics;}
 
     @Override
     public Vector2d getPosition(){
@@ -40,6 +48,16 @@ public class Animal implements WorldElement {
         statistics.incrementEatenPlants();
         statistics.changeEnergy(plantEnergy);}
 
+    private void setParents(Animal parent1, Animal parent2){
+        parents.add(parent1);
+        parents.add(parent2);
+    }
+    private void updateDescendants() {
+        for (Animal animal : parents) {
+            animal.incrementDescendants();
+            animal.updateDescendants();
+        }
+    }
 
     public void move() {
         int[] dx = {-1, 0, 1, 1, 1, 0, -1, -1};
@@ -114,9 +132,26 @@ public class Animal implements WorldElement {
         childGenotype.mutate(maxMutations, minMutations);
 
         Animal child = new Animal(position, energyToChild, childGenotype);
+        child.setParents(this, partner);
 
-        statistics.incrementDescendants();
-        partner.statistics.incrementDescendants();
+        statistics.incrementChildren();
+        partner.statistics.incrementChildren();
+        child.updateDescendants();
         return child;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Genotype:\n"+genotype.getGenes().toString()+"\n");
+        sb.append("Active gene:\n"+genotype.getActiveGene()+"\n");
+        sb.append("Energy:\n"+statistics.getEnergy()+"\n");
+        sb.append("Eaten plants:\n"+statistics.getEatenPlants()+"\n");
+        sb.append("Children:\n"+statistics.getChildren()+"\n");
+        sb.append("Descendants:\n"+statistics.getDescendants()+"\n");
+        sb.append("Age:\n"+statistics.getAge()+"\n");
+        if (!isAlive()) {
+            sb.append("Date of death:\n" + statistics.getDateOfDeath() + "\n");
+        }
+        return sb.toString();
     }
 }
