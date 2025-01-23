@@ -11,10 +11,13 @@ public class Simulation implements Runnable{
     private final WorldMap worldMap;
     private final Configuration config;
     //private final GameStats gameStats;
+    private boolean running = false;
 
     public Simulation(Configuration config, WorldMap worldMap) {
         this.config = config;
         this.worldMap = worldMap;
+        initializeAnimals();
+        worldMap.growPlants(config.startingPlantCount());
     }
 
     private void initializeAnimals() {
@@ -32,16 +35,28 @@ public class Simulation implements Runnable{
 
     }
 
+    public void switchPause() {
+        running = !running;
+    }
+
+    public void close(){
+        running = false;
+    }
+
     @Override
     public void run() {
-        initializeAnimals();
-        worldMap.growPlants(config.startingPlantCount());
-        while (true) {
+        while (running) {
+            System.out.println("xd");
             worldMap.removeDeadAnimals();
             worldMap.moveAnimals();
             worldMap.eatPlants(config.energyFromEating());
             worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
             worldMap.growPlants(config.plantsPerDay());
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Animal implements WorldElement {
 
+    protected UUID id = UUID.randomUUID();
     protected int direction;
     protected Vector2d position;
     protected AnimalStats statistics;
@@ -33,6 +34,8 @@ public class Animal implements WorldElement {
         return this.position.equals(vector2d);
     }
 
+    public UUID getId(){return this.id;}
+
     public void eat(int plantEnergy){
         statistics.incrementEatenPlants();
         statistics.changeEnergy(plantEnergy);}
@@ -44,7 +47,7 @@ public class Animal implements WorldElement {
 
         int moveDirection = (direction + genotype.getActiveGene()) % 8;
         this.position = new Vector2d(position.getX() + dx[moveDirection], position.getY() + dy[moveDirection]);
-
+        this.statistics.setEnergy(statistics.getEnergy() - 1);
 
         genotype.moveToNextGene();
         statistics.incrementAge();
@@ -59,36 +62,41 @@ public class Animal implements WorldElement {
     }
 
     private List<Integer> splitChildGenes(Animal stronger, Animal weaker, double energyProportionStronger, double energyProportionWeaker) {
+
         Random random = new Random();
         int strongerSide = random.nextInt(2);
         //0 - left
-        int strongerSplice = (int)( Math.round(energyProportionStronger * (stronger.getGenotype().size()-1)));
-        int weakerSplice = (stronger.getGenotype().size()-1) - strongerSplice;
+        int genotypeSize = stronger.getGenotype().size();
+        int strongerSplice = (int)( Math.round(energyProportionStronger * genotypeSize) );
+        int weakerSplice = genotypeSize - strongerSplice;
         List<Integer> childGenes = new ArrayList<>();
 
         if(strongerSide == 0){
-            for(int i = 0; i < strongerSplice; i++){
-                childGenes.add(stronger.getGenotype().get(i));
-            }
-            for(int i = stronger.getGenotype().size()-1; i > weakerSplice; i--){
-                childGenes.add(weaker.getGenotype().get(i));
-            }
+            childGenes.addAll(stronger.getGenotype().subList(0, strongerSplice));
+            childGenes.addAll(weaker.getGenotype().subList(strongerSplice, genotypeSize));
+//            for(int i = 0; i < strongerSplice; i++){
+//                childGenes.add(stronger.getGenotype().get(i));
+//            }
+//            for(int i = stronger.getGenotype().size()-1; i > weakerSplice; i--){
+//                childGenes.add(weaker.getGenotype().get(i));
+//            }
         }
         else{
-            for(int i = stronger.getGenotype().size()-1; i > strongerSplice; i--){
-                childGenes.add(stronger.getGenotype().get(i));
-            }
-            for(int i = 0; i < weakerSplice; i++){
-                childGenes.add(weaker.getGenotype().get(i));
-            }
+            childGenes.addAll(weaker.getGenotype().subList(0, genotypeSize -strongerSplice));
+            childGenes.addAll(stronger.getGenotype().subList(genotypeSize-strongerSplice, genotypeSize));
+//            for(int i = stronger.getGenotype().size()-1; i > strongerSplice; i--){
+//                childGenes.add(stronger.getGenotype().get(i));
+//            }
+//            for(int i = 0; i < weakerSplice; i++){
+//                childGenes.add(weaker.getGenotype().get(i));
+//            }
         }
-
         return childGenes;
     }
 
     public Animal reproduce(Animal partner, int reproductionCost, int minMutations, int maxMutations) {
-        int energyProportionThis = this.getEnergy()/(partner.getEnergy()+this.getEnergy());
-        int energyProporionOther = 1 - energyProportionThis;
+        double energyProportionThis = (double)this.getEnergy()/(partner.getEnergy()+this.getEnergy());
+        double energyProporionOther = 1 - energyProportionThis;
         List<Integer> childGenes;
 
         if(energyProportionThis > energyProporionOther){

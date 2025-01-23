@@ -55,6 +55,7 @@ public class GameMenuPresenter {
     @FXML
     private CheckBox saveDailyStats;
 
+
     public GameMenuPresenter() {
     }
 
@@ -85,7 +86,7 @@ public class GameMenuPresenter {
         c = c + "," + plantsPerDay.getText();
         c = c + "," + energyFromEating.getText();
         c = c + "," + startingAnimalCount.getText();
-        c = c + ", " + startingEnergyAmount.getText();
+        c = c + "," + startingEnergyAmount.getText();
         c = c + "," + energyForReproduction.getText();
         c = c + "," + reproductionCost.getText();
         c = c + "," + minMutations.getText();
@@ -126,8 +127,10 @@ public class GameMenuPresenter {
         GamePresenter presenter = prepareStage();
         WorldMap map = pickMap(config, presenter);
         presenter.setWorldMap(map);
+        presenter.setConfig(config);
         Simulation simulation = new Simulation(config, map);
-        simulation.run();
+        presenter.setSimulation(simulation);
+        presenter.startSimulation(simulation);
     }
 
     public void onClickSaveConfig() throws IOException {
@@ -169,6 +172,9 @@ public class GameMenuPresenter {
         BorderPane viewRoot = loader.load();
         GamePresenter presenter = loader.getController();
         configureStage(primaryStage, viewRoot);
+        primaryStage.setOnCloseRequest(event -> {
+            presenter.windowClosed();
+        });
         primaryStage.show();
         return presenter;
     }
@@ -179,5 +185,6 @@ public class GameMenuPresenter {
         primaryStage.setTitle("Darwin World");
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+
     }
 }

@@ -54,12 +54,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         candidates.sort(Comparator.comparing(Animal::getEnergy)
                 .thenComparing(Animal::getAge)
                 .thenComparing(Animal::getChildren)
+                .thenComparing(Animal::getId)
                 .reversed());
-
-        if (candidates.stream().distinct().count() == 1) {
-            Collections.shuffle(candidates);
-        }
-
+//        if (candidates.stream().distinct().count() == 1) {
+//            Collections.shuffle(candidates);
+//        }
         return candidates;
     }
 
@@ -81,6 +80,7 @@ public abstract class AbstractWorldMap implements WorldMap {
                 animals.remove(position);
             }
         }
+        deadAnimals.clear();
         mapChanged();
     }
 
@@ -144,7 +144,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public abstract void growPlants(int amount);
 
-    private void mapChanged() {
+    protected void mapChanged() {
         presenter.mapChanged();
     }
 }

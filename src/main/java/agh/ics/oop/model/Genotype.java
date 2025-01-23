@@ -51,7 +51,7 @@ class Genotype {
 
     public void mutate(int maxMutations, int minMutations) {
         Random random = new Random();
-        int mutationsCount = random.nextInt(maxMutations) + minMutations;
+        int mutationsCount = random.nextInt(minMutations, maxMutations+1);
         for (int i = 0; i < mutationsCount; i++) {
             int mutationIndex = random.nextInt(this.getGenes().size());
             this.genes.set(mutationIndex, random.nextInt(8));
