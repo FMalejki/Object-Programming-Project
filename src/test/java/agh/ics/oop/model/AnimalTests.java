@@ -20,8 +20,8 @@ class AnimalTest {
         startPosition = new Vector2d(5, 5);
         List<Integer> genes = new ArrayList<>(List.of(0, 1, 2, 3, 4, 5, 6, 7));
         genotype = new Genotype(genes);
-        animal = new AbstractAnimal(startPosition, 100, genotype);
-        partner = new AbstractAnimal(startPosition, 100, genotype);
+        animal = new BasicAnimal(startPosition, 100, genotype);
+        partner = new BasicAnimal(startPosition, 100, genotype);
     }
 
     @Test
