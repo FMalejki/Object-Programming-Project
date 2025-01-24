@@ -32,6 +32,10 @@ public abstract class AbstractWorldMap implements WorldMap {
         day++;
     }
 
+    public int getDay() {
+        return day;
+    }
+
     public boolean hasPlant(Vector2d pos) {
         return plants.containsKey(pos);
     }

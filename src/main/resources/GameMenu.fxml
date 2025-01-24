@@ -5,10 +5,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.oop.model.GameMenuPresenter">
    <bottom>
@@ -21,12 +23,12 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="50.0" prefWidth="150.0">
                <children>
-                  <Button fx:id="saveConfig" mnemonicParsing="false" text="Save Configuration" onAction="#onClickSaveConfig"/>
+                  <Button fx:id="saveConfig" mnemonicParsing="false" onAction="#onClickSaveConfig" text="Save Configuration" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="50.0" prefWidth="150.0">
                <children>
-                  <Button fx:id="loadConfig" mnemonicParsing="false" text="Load Configuration" onAction="#onClickLoadConfig"/>
+                  <Button fx:id="loadConfig" mnemonicParsing="false" onAction="#onClickLoadConfig" text="Load Configuration" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="50.0" prefWidth="150.0">
@@ -38,84 +40,113 @@
       </HBox>
    </bottom>
    <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="DARWIN WORLD">
+               <font>
+                  <Font name="Cambria Math" size="68.0" />
+               </font>
+            </Label>
+         </children></HBox>
    </top>
    <center>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <VBox prefHeight="450.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="width" promptText="Map Width" />
+                        <Label text="Map Width" />
+                        <TextField fx:id="width" maxWidth="150.0" promptText="1 - 50" />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="height" promptText="Map Height" />
+                        <Label text="Map Height" />
+                        <TextField fx:id="height" maxWidth="150.0" promptText="1 - 50" />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="startingPlantCount" promptText="Starting Plant Amount" />
+                        <Label text="Starting Plant Amount" />
+                        <TextField fx:id="startingPlantCount" maxWidth="150.0" promptText="0, 1, 2..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="startingAnimalCount" promptText="Starting Animal Amount" />
+                        <Label text="Starting Animal Amount" />
+                        <TextField fx:id="startingAnimalCount" maxWidth="150.0" promptText="0, 1, 2..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="startingEnergyAmount" promptText="Starting Animal Energy" />
+                        <Label text="Starting Animal Energy" />
+                        <TextField fx:id="startingEnergyAmount" maxWidth="150.0" promptText="1, 2, 3..." />
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
             </VBox>
             <VBox prefHeight="450.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="plantsPerDay" promptText="Plants Per Day" />
+                        <Label text="Plants Per Day" />
+                        <TextField fx:id="plantsPerDay" maxWidth="150.0" promptText="0, 1, 2..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="energyFromEating" promptText="Energy From Eating" />
+                        <Label text="Energy From Eating" />
+                        <TextField fx:id="energyFromEating" maxWidth="150.0" promptText="0, 1, 2..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="energyForReproduction" promptText="Energy For Reproduction" />
+                        <Label text="Energy For Reproduction" />
+                        <TextField fx:id="energyForReproduction" maxWidth="150.0" promptText="1, 2, 3..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="reproductionCost" promptText="Reproduction Cost" />
+                        <Label text="Reproduction Cost" />
+                        <TextField fx:id="reproductionCost" maxWidth="150.0" promptText="1, 2, 3..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="genomeLength" promptText="Genome Length" />
+                        <Label text="Genome Length" />
+                        <TextField fx:id="genomeLength" maxWidth="150.0" promptText="1, 2, 3..." />
                      </children>
-                  </HBox>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label fx:id="incorrectConfigLabel" prefHeight="18.0" prefWidth="222.0" text="INCORRECT SIMULATION PARAMETERS" textFill="RED" visible="false">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
                </children>
             </VBox>
             <VBox prefHeight="450.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="minMutations" promptText="Min Mutations" />
+                        <Label text="Min Mutations" />
+                        <TextField fx:id="minMutations" maxWidth="150.0" promptText="0, 1, 2..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <TextField fx:id="maxMutations" promptText="Max Mutations" />
+                        <Label text="Max Mutations" />
+                        <TextField fx:id="maxMutations" maxWidth="150.0" promptText="0, 1, 2..." />
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <ChoiceBox fx:id="mapVariant" prefWidth="150.0" value="BasicMap">
+                        <Label text="Map Variant" />
+                        <ChoiceBox fx:id="mapVariant" maxWidth="150.0" minWidth="150.0" value="BasicMap">
                         <items>
                            <FXCollections fx:factory="observableArrayList">
                               <String fx:value="BasicMap" />
@@ -124,10 +155,11 @@
                         </items>
                      </ChoiceBox>
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+                  </VBox>
+                  <VBox alignment="CENTER" minHeight="60.0">
                      <children>
-                        <ChoiceBox fx:id="animalVariant" prefWidth="150.0" value="BasicAnimal">
+                        <Label text="Animal Variant" />
+                        <ChoiceBox fx:id="animalVariant" maxWidth="150.0" prefWidth="150.0" value="BasicAnimal">
                                 <items>
                                    <FXCollections fx:factory="observableArrayList">
                                       <String fx:value="BasicAnimal" />
@@ -136,7 +168,7 @@
                                 </items>
                         </ChoiceBox>
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
             </VBox>
          </children>

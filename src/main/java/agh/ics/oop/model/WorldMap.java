@@ -27,4 +27,5 @@ public interface WorldMap {
     public void statsChanged(String stats);
     public Set<Vector2d> dominatingGenotypePos();
     public Set<Vector2d> getPreferredPlantSpots();
+    public int getDay();
 }
