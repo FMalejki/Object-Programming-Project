@@ -83,7 +83,7 @@ public class GamePresenter {
         double paneHeight = borderPane.getHeight();
         int width = config.width();
         int height = config.height();
-        return Math.min((paneWidth-300)/width, (paneHeight-50)/height);
+        return Math.min((paneWidth-310)/width, (paneHeight-60)/height);
     }
 
     private void resetTrackingText() {
