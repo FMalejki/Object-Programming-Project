@@ -16,7 +16,9 @@ class JungleMapTest {
 
     @BeforeEach
     void setUp() {
-        jungleMap = new JungleMap(width, height, observer);
+        jungleMap = new JungleMap(width, height);
+        jungleMap.setPresenter(observer);
+        observer.setWorldMap(jungleMap);
     }
 
     @Test

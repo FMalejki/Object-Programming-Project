@@ -113,11 +113,11 @@ public class GameMenuPresenter {
         animalVariant.setValue(config[13]);
     }
 
-    private WorldMap pickMap(Configuration config, GamePresenter presenter) {
+    private WorldMap pickMap(Configuration config) {
         return switch (config.mapVariant()) {
-            case "BasicMap" -> new BasicMap(config.width(), config.height(), presenter);
-            case "JungleMap" -> new JungleMap(config.width(), config.height(), presenter);
-            default -> new BasicMap(config.width(), config.height(), presenter);
+            case "BasicMap" -> new BasicMap(config.width(), config.height());
+            case "JungleMap" -> new JungleMap(config.width(), config.height());
+            default -> new BasicMap(config.width(), config.height());
         };
     }
 
@@ -126,7 +126,8 @@ public class GameMenuPresenter {
             incorrectConfigLabel.setVisible(false);
             Configuration config = parseConfiguration();
             GamePresenter presenter = prepareStage();
-            WorldMap map = pickMap(config, presenter);
+            WorldMap map = pickMap(config);
+            map.setPresenter(presenter);
             presenter.setWorldMap(map);
             presenter.setConfig(config);
             Simulation simulation = new Simulation(config, map);

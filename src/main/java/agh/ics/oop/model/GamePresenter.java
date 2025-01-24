@@ -43,6 +43,9 @@ public class GamePresenter {
     private Thread gameThread;
     private Simulation simulation;
     private Animal trackedAnimal = null;
+    private ExtendedStackPane trackedPane = null;
+    private boolean trackingFields = false;
+    private boolean trackingGenes = false;
 
 
     public GamePresenter() {
@@ -87,13 +90,25 @@ public class GamePresenter {
         trackedStats.setText("Select an animal to track");
     }
 
-    public void trackAnimal(Animal animal) {
+    public void trackAnimal(Animal animal, ExtendedStackPane pane) {
+        if (animal == null) {
+            return;
+        }
         if (trackedAnimal == animal) {
             trackedAnimal = null;
+            trackedPane = null;
+            Circle circle = (Circle) pane.getChildren().get(0);
+            circle.setFill(Color.BLACK);
             Platform.runLater(this::resetTrackingText);
         }
         else {
+            if (trackedPane != null) {
+                ((Circle) trackedPane.getChildren().get(0)).setFill(Color.BLACK);
+            }
             trackedAnimal = animal;
+            trackedPane = pane;
+            ((Circle) pane.getChildren().get(0)).setFill(Color.PINK);
+            Platform.runLater(() -> trackedStats.setText(trackedAnimal.toString()));
         }
     }
 
@@ -113,7 +128,7 @@ public class GamePresenter {
             circle.setCenterX(size/2);
             circle.setCenterY(0.8*size/2);
             circle.setRadius(0.75*size/2);
-            if (animal == trackedAnimal) {
+            if (trackedAnimal != null && animal.getPosition() == trackedAnimal.getPosition()) {
                 circle.setFill(Color.PINK);
             }
             Rectangle rectangle = new Rectangle();
@@ -125,7 +140,7 @@ public class GamePresenter {
     }
 
     private void adjustEnergyBar(Rectangle rectangle, int energy, double size) {
-        float percentage = Math.min((float) energy / (2 * config.energyForReproduction()), 1);
+        float percentage = Math.min((float) energy / (2 * config.reproductionCost()), 1);
         rectangle.setFill(javafx.scene.paint.Color.rgb(Math.round(Math.min(255, 2*255*(1-percentage))), Math.round(Math.min(255, 2*255*percentage)), 0));
         StackPane.setAlignment(rectangle, Pos.BOTTOM_LEFT);
         rectangle.setHeight(size*0.17);

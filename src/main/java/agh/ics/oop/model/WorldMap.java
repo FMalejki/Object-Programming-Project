@@ -28,4 +28,6 @@ public interface WorldMap {
     public Set<Vector2d> dominatingGenotypePos();
     public Set<Vector2d> getPreferredPlantSpots();
     public int getDay();
+    public void setPresenter(GamePresenter presenter);
+    public void mapChanged();
 }

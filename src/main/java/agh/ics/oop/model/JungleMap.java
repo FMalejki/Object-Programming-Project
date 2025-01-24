@@ -6,8 +6,8 @@ public class JungleMap extends AbstractWorldMap{
 
     private final Map<Vector2d, Integer> nearPlants = new HashMap<>();
 
-    public JungleMap(int width, int height, GamePresenter presenter) {
-        super(width, height, presenter);
+    public JungleMap(int width, int height) {
+        super(width, height);
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
                 neutralPlantSpots.add(new Vector2d(x, y));
@@ -88,7 +88,6 @@ public class JungleMap extends AbstractWorldMap{
             }
 
         }
-        mapChanged();
     }
 
     @Override

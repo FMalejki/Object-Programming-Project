@@ -8,8 +8,8 @@ public class BasicMap extends AbstractWorldMap {
 
     private Boundary jungleBonds;
 
-    public BasicMap(int width, int height, GamePresenter presenter) {
-        super(width, height, presenter);
+    public BasicMap(int width, int height) {
+        super(width, height);
         this.initializeJungle();
         setPreferedPlantFields(width, height);
     }
@@ -53,7 +53,6 @@ public class BasicMap extends AbstractWorldMap {
         else {
             neutralPlantSpots.add(position);
         }
-        mapChanged();
     }
 
     @Override
@@ -71,6 +70,5 @@ public class BasicMap extends AbstractWorldMap {
                 preferredPlantSpots.remove(position);
             }
         }
-        mapChanged();
     }
 }

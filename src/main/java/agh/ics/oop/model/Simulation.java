@@ -65,47 +65,28 @@ public class Simulation implements Runnable{
         running = false;
     }
 
-    private void removeDead() {
-        worldMap.removeDeadAnimals();
-        gameStats.updateAvgLifespan(worldMap.avgLifespan());
-        gameStats.updateFreeFields(worldMap.countFreeFields());
-        worldMap.statsChanged(gameStats.toString());
-    }
-    private void move() {
-        worldMap.moveAnimals();
-        gameStats.updateFreeFields(worldMap.countFreeFields());
-        gameStats.updateAvgEnergy(worldMap.totalEnergy());
-        worldMap.statsChanged(gameStats.toString());
-    }
-    private void eat() {
-        worldMap.eatPlants(config.energyFromEating());
-        gameStats.updateAvgEnergy(worldMap.totalEnergy());
-        gameStats.updateAllPlants(worldMap.countPlants());
-        worldMap.statsChanged(gameStats.toString());
-    }
-    private void reproduce() {
-        worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
+    private void updateAllStats() {
         gameStats.updateAllAnimals(worldMap.countAnimals());
         gameStats.updateAvgChildren(worldMap.totalChildren());
         gameStats.updateGenotypes(worldMap.getPopularGenotypes());
-        worldMap.statsChanged(gameStats.toString());
-    }
-    private void grow() {
-        worldMap.growPlants(config.plantsPerDay());
-        gameStats.updateAllPlants(worldMap.countPlants());
         gameStats.updateFreeFields(worldMap.countFreeFields());
-        worldMap.statsChanged(gameStats.toString());
+        gameStats.updateAvgLifespan(worldMap.avgLifespan());
+        gameStats.updateAvgEnergy(worldMap.totalEnergy());
+        gameStats.updateAllPlants(worldMap.countPlants());
     }
 
     @Override
     public void run() {
         while (running) {
-            removeDead();
-            move();
-            eat();
-            reproduce();
-            grow();
+            worldMap.removeDeadAnimals();
+            worldMap.moveAnimals();
+            worldMap.eatPlants(config.energyFromEating());
+            worldMap.reproduceAnimals(config.energyForReproduction(), config.reproductionCost(), config.minMutations(), config.maxMutations());
+            worldMap.growPlants(config.plantsPerDay());
             worldMap.incrementDay();
+            updateAllStats();
+            worldMap.statsChanged(gameStats.toString());
+            worldMap.mapChanged();
             if (exportCSV) {
                 try {
                     exportDailyStats();
@@ -114,7 +95,7 @@ public class Simulation implements Runnable{
                 }
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

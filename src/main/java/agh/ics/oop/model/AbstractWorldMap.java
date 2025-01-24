@@ -13,14 +13,17 @@ public abstract class AbstractWorldMap implements WorldMap {
     protected final Set<Vector2d> preferredPlantSpots = new HashSet<>();
     protected final Set<Vector2d> neutralPlantSpots = new HashSet<>();
     protected final List<Animal> deadAnimals = new ArrayList<>();
-    protected final GamePresenter presenter;
+    protected GamePresenter presenter;
     protected int day = 0;
     protected int totalDeadAnimals = 0;
     protected int deadAnimalAgeSum = 0;
 
 
-    public AbstractWorldMap(int width, int height, GamePresenter presenter) {
+    public AbstractWorldMap(int width, int height) {
         this.boundary = new Boundary(new Vector2d(0, 0), new Vector2d(width -1, height -1));
+    }
+
+    public void setPresenter(GamePresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -72,9 +75,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 .thenComparing(Animal::getChildren)
                 .thenComparing(Animal::getId)
                 .reversed());
-//        if (candidates.stream().distinct().count() == 1) {
-//            Collections.shuffle(candidates);
-//        }
         return candidates;
     }
 
@@ -99,7 +99,6 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         deadAnimals.clear();
-        mapChanged();
     }
 
     //Przy założeniu, że ruch pobiera 1 energii
@@ -133,7 +132,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (Animal animal : newPositions) {
             placeAnimal(animal);
         }
-        mapChanged();
     }
 
     public void eatPlants(int energyFromEating) {
@@ -144,7 +142,6 @@ public abstract class AbstractWorldMap implements WorldMap {
                 removePlant(position);
             }
         }
-        mapChanged();
     }
 
     public abstract void removePlant(Vector2d position);
@@ -169,7 +166,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public abstract void growPlants(int amount);
 
-    protected void mapChanged() {
+    public void mapChanged() {
         presenter.mapChanged();
     }
 

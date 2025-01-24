@@ -8,6 +8,6 @@ public class ExtendedStackPane extends StackPane {
     public ExtendedStackPane(Animal animal, GamePresenter presenter) {
         this.animal = animal;
         this.presenter = presenter;
-        this.setOnMouseClicked(event -> {presenter.trackAnimal(animal);});
+        this.setOnMouseClicked(event -> {presenter.trackAnimal(animal, this);});
     }
 }
