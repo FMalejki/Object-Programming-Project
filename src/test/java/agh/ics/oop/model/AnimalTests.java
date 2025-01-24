@@ -1,5 +1,6 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.Boundary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +64,7 @@ class AnimalTest {
 
     @Test
     void testMove() {
-        animal.move();
+        animal.move(new Boundary(new Vector2d(0, 0), new Vector2d(10, 10)));
         Vector2d newPosition = animal.getPosition();
         assertNotEquals(startPosition, newPosition);
     }

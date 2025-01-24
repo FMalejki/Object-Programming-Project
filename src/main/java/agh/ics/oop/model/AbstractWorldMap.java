@@ -51,22 +51,6 @@ public abstract class AbstractWorldMap implements WorldMap {
         return (!animals.containsKey(pos) || animals.get(pos).isEmpty()) ? null : prioritizeAnimals(pos).getFirst();
     }
 
-    protected Vector2d checkPlacementOnMap(Vector2d animalPosition) {
-        if(animalPosition.getX() < this.boundary.start().getX()){
-            animalPosition = new Vector2d(this.boundary.end().getX(), animalPosition.getY());
-        }
-        if(animalPosition.getY() < this.boundary.start().getY()){
-            animalPosition = new Vector2d(animalPosition.getX(), this.boundary.end().getY());
-        }
-        if(animalPosition.getX() > this.boundary.end().getX()){
-            animalPosition = new Vector2d(this.boundary.start().getX(), animalPosition.getY());
-        }
-        if(animalPosition.getY() > this.boundary.end().getY()){
-            animalPosition = new Vector2d(animalPosition.getX(), this.boundary.start().getY());
-        }
-        return animalPosition;
-    }
-
     public List<Animal> prioritizeAnimals(Vector2d location) {
         List<Animal> candidates = new ArrayList<>(List.copyOf(animals.get(location)));
 
@@ -106,14 +90,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> newPositions = new ArrayList<>();
         List<Vector2d> toRemoveFields = new ArrayList<>();
         for (List<Animal> oneField : animals.values()) {
-            if (oneField.size() == 0) {System.out.println("xddd");}
             Vector2d position = oneField.get(0).getPosition();
             List<Animal> toRemoveAnimals = new ArrayList<>();
             for (Animal animal : oneField) {
                 if (animal.getEnergy() > 0) {
-                    animal.move();
-                    animal.moveToSpecificPoint(checkPlacementOnMap(animal.getPosition()));
-
+                    animal.move(boundary);
                 }
                 else {
                     animal.die(day);
@@ -128,7 +109,6 @@ public abstract class AbstractWorldMap implements WorldMap {
             }
         }
         toRemoveFields.forEach(animals.keySet()::remove);
-
         for (Animal animal : newPositions) {
             placeAnimal(animal);
         }
@@ -250,11 +230,15 @@ public abstract class AbstractWorldMap implements WorldMap {
     }
 
     public Set<Vector2d> dominatingGenotypePos() {
-        List<Integer> dominating = getPopularGenotypes().get(0);
+        List<List<Integer>> dominating = getPopularGenotypes();
+        if (dominating.isEmpty()) {
+            return Collections.emptySet();
+        }
+        List<Integer> top = dominating.get(0);
         Set<Vector2d> positions = new HashSet<>();
         for (Vector2d position : animals.keySet()) {
             for (Animal animal : animals.get(position)) {
-                if (animal.isAlive() && animal.getGenotype().equals(dominating)) {
+                if (animal.isAlive() && animal.getGenotype().equals(top)) {
                     positions.add(position);
                 }
             }

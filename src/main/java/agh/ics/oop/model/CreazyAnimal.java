@@ -1,6 +1,10 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.Boundary;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CreazyAnimal extends AbstractAnimal {
 
@@ -9,13 +13,9 @@ public class CreazyAnimal extends AbstractAnimal {
     }
 
     @Override
-    public void move() {
-        int[] dx = {-1, 0, 1, 1, 1, 0, -1, -1};
-        int[] dy = {-1, -1, -1, 0, 1, 1, 1, 0};
-        int moveDirection = (super.direction + super.genotype.getActiveGene()) % 8;
-        super.position = new Vector2d(position.getX() + dx[moveDirection], position.getY() + dy[moveDirection]);
-        super.genotype.moveToNextGeneCreazy();
-        statistics.incrementAge();
+    public void move(Boundary boundary) {
+        super.move(boundary);
+        genotype.moveToNextGeneCreazy();
     }
 
     @Override
@@ -43,7 +43,9 @@ public class CreazyAnimal extends AbstractAnimal {
 
         statistics.incrementChildren();
         partner.getStats().incrementChildren();
-        child.updateDescendants();
+        Set<Animal> ancestors = new HashSet<>();
+        child.updateDescendants(ancestors);
+        ancestors.forEach(Animal::incrementDescendants);
         return child;
     }
 }

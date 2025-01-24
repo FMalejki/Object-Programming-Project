@@ -5,10 +5,7 @@ import agh.ics.oop.model.util.Configuration;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class Simulation implements Runnable{
 
@@ -95,7 +92,7 @@ public class Simulation implements Runnable{
                 }
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.Boundary;
+
 import java.util.*;
 
 public abstract class AbstractAnimal implements Animal {
@@ -66,30 +68,39 @@ public abstract class AbstractAnimal implements Animal {
         parents.add(parent2);
     }
     @Override
-    public void updateDescendants() {
+    public void updateDescendants(Set<Animal> ancestors) {
         for (Animal animal : parents) {
-            animal.incrementDescendants();
-            animal.updateDescendants();
+            ancestors.add(animal);
+            animal.updateDescendants(ancestors);
         }
     }
 
     @Override
-    public void move() {
+    public void move(Boundary boundary) {
         int[] dx = {-1, 0, 1, 1, 1, 0, -1, -1};
         int[] dy = {-1, -1, -1, 0, 1, 1, 1, 0};
 
-        int moveDirection = (direction + genotype.getActiveGene()) % 8;
-        this.position = new Vector2d(position.getX() + dx[moveDirection], position.getY() + dy[moveDirection]);
-        this.statistics.setEnergy(statistics.getEnergy() - 1);
+        int gene = genotype.getActiveGene();
+        int moveDirection = (direction + gene) % 8;
 
-        genotype.moveToNextGene();
+        position = new Vector2d(position.getX() + dx[moveDirection], position.getY() + dy[moveDirection]);
+        if(position.getY() < boundary.start().getY() || position.getY() > boundary.end().getY()){
+            moveDirection = (moveDirection + 4) % 8;
+            position = position.add(new Vector2d(dx[moveDirection], dy[moveDirection]));
+        }
+        if(position.getX() < boundary.start().getX()){
+            position = new Vector2d(boundary.end().getX(), position.getY());
+        }
+        if(position.getX() > boundary.end().getX()){
+            position = new Vector2d(boundary.start().getX(), position.getY());
+        }
+
+        direction = moveDirection;
+        this.statistics.setEnergy(statistics.getEnergy() - 1);
         statistics.incrementAge();
     }
 
-    @Override
-    public void moveToSpecificPoint(Vector2d position) {
-        this.position = new Vector2d(position.getX(), position.getY());
-    }
+
 
     @Override
     public boolean canReproduce(int reproductionCost) {
@@ -104,28 +115,15 @@ public abstract class AbstractAnimal implements Animal {
         //0 - left
         int genotypeSize = stronger.getGenotype().size();
         int strongerSplice = (int)( Math.round(energyProportionStronger * genotypeSize) );
-        int weakerSplice = genotypeSize - strongerSplice;
         List<Integer> childGenes = new ArrayList<>();
 
         if(strongerSide == 0){
             childGenes.addAll(stronger.getGenotype().subList(0, strongerSplice));
             childGenes.addAll(weaker.getGenotype().subList(strongerSplice, genotypeSize));
-//            for(int i = 0; i < strongerSplice; i++){
-//                childGenes.add(stronger.getGenotype().get(i));
-//            }
-//            for(int i = stronger.getGenotype().size()-1; i > weakerSplice; i--){
-//                childGenes.add(weaker.getGenotype().get(i));
-//            }
         }
         else{
             childGenes.addAll(weaker.getGenotype().subList(0, genotypeSize -strongerSplice));
             childGenes.addAll(stronger.getGenotype().subList(genotypeSize-strongerSplice, genotypeSize));
-//            for(int i = stronger.getGenotype().size()-1; i > strongerSplice; i--){
-//                childGenes.add(stronger.getGenotype().get(i));
-//            }
-//            for(int i = 0; i < weakerSplice; i++){
-//                childGenes.add(weaker.getGenotype().get(i));
-//            }
         }
         return childGenes;
     }

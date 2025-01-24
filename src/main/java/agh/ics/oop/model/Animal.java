@@ -1,6 +1,9 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.Boundary;
+
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface Animal extends WorldElement {
@@ -32,11 +35,9 @@ public interface Animal extends WorldElement {
 
     void setParents(Animal parent1, Animal parent2);
 
-    void updateDescendants();
+    void updateDescendants(Set<Animal> ancestors);
 
-    void move();
-
-    void moveToSpecificPoint(Vector2d position);
+    void move(Boundary boundary);
 
     boolean canReproduce(int reproductionCost);
 
