@@ -12,7 +12,8 @@ class BasicMapTest {
 
     @BeforeEach
     void setUp() {
-        basicMap = new BasicMap(10, 10, gamePresenter);
+        basicMap = new BasicMap(10, 10);
+        basicMap.setPresenter(gamePresenter);
     }
 
     @Test
@@ -41,6 +42,8 @@ class BasicMapTest {
     @Test
     void testGrowPlantsPreferredSpot() {
         Vector2d preferredPosition = new Vector2d(5, 5);
+        basicMap.neutralPlantSpots.clear();
+        basicMap.preferredPlantSpots.clear();
         basicMap.preferredPlantSpots.add(preferredPosition);
 
         basicMap.growPlants(1);
@@ -51,6 +54,8 @@ class BasicMapTest {
     @Test
     void testGrowPlantsNeutralSpot() {
         Vector2d neutralPosition = new Vector2d(0, 0);
+        basicMap.neutralPlantSpots.clear();
+        basicMap.preferredPlantSpots.clear();
         basicMap.neutralPlantSpots.add(neutralPosition);
 
         basicMap.growPlants(1);
@@ -71,6 +76,8 @@ class BasicMapTest {
     void testGrowPlantsMultiple() {
         Vector2d preferredPosition = new Vector2d(5, 5);
         Vector2d neutralPosition = new Vector2d(0, 0);
+        basicMap.neutralPlantSpots.clear();
+        basicMap.preferredPlantSpots.clear();
         basicMap.preferredPlantSpots.add(preferredPosition);
         basicMap.neutralPlantSpots.add(neutralPosition);
 

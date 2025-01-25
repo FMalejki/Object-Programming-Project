@@ -1,23 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.oop.model.GamePresenter">
+<BorderPane fx:id="borderPane" minHeight="550.0" minWidth="800.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.oop.model.GamePresenter">
     <center>
-        <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true">
+        <GridPane fx:id="mapGrid" alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minHeight="500.0" minWidth="500.0">
 
         </GridPane>
     </center>
    <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox alignment="CENTER" minHeight="500.0" minWidth="150.0" prefHeight="500.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" maxHeight="50.0" maxWidth="150.0" minHeight="50.0" minWidth="150.0" prefHeight="50.0" prefWidth="100.0">
+               <children>
+                  <Label text="GENERAL STATS" />
+               </children>
+            </HBox>
+            <TextArea fx:id="generalStats" editable="false" maxHeight="350.0" maxWidth="150.0" minHeight="350.0" minWidth="150.0" prefHeight="350.0" prefWidth="150.0" />
+         </children></VBox>
    </left>
    <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox alignment="CENTER" minHeight="500.0" minWidth="150.0" prefHeight="500.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" maxHeight="50.0" maxWidth="150.0" minHeight="50.0" minWidth="150.0" prefHeight="50.0" prefWidth="100.0">
+               <children>
+                  <Label text="TRACKED STATS" />
+               </children>
+            </HBox>
+            <TextArea fx:id="trackedStats" editable="false" maxHeight="350.0" maxWidth="150.0" minHeight="350.0" minWidth="150.0" prefHeight="350.0" prefWidth="150.0" text="Select an animal to track" />
+         </children></VBox>
    </right>
    <bottom>
-      <HBox prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+               <children>
+                  <Button fx:id="showDominatingGenotype" disable="true" mnemonicParsing="false" onAction="#onClickShowDominatingGenotype" text="Show Dominating Genotype" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="pause" mnemonicParsing="false" onAction="#onClickPause" text="Pause" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="50.0" prefWidth="300.0">
+               <children>
+                  <Button fx:id="showPreferredByPlants" disable="true" mnemonicParsing="false" onAction="#onClickShowPreferredByPlants" text="Show Preferred By Plants" />
+               </children>
+            </VBox>
+         </children></HBox>
    </bottom>
 </BorderPane>

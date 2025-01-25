@@ -6,13 +6,14 @@ public class JungleMap extends AbstractWorldMap{
 
     private final Map<Vector2d, Integer> nearPlants = new HashMap<>();
 
-    public JungleMap(int width, int height, GamePresenter presenter) {
-        super(width, height, presenter);
+    public JungleMap(int width, int height) {
+        super(width, height);
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
                 neutralPlantSpots.add(new Vector2d(x, y));
             }
         }
+
     }
 
     public List<Vector2d> getSurroundings(Vector2d position){
@@ -40,6 +41,7 @@ public class JungleMap extends AbstractWorldMap{
         for (Vector2d field : surroundings){
             if (nearPlants.get(field) == 1){
                 nearPlants.remove(field);
+                preferredPlantSpots.remove(field);
             }
             else {
                 nearPlants.replace(field, nearPlants.get(field)-1);
@@ -54,13 +56,15 @@ public class JungleMap extends AbstractWorldMap{
     }
     private void addPlants(List<Vector2d> positions){
         for (Vector2d position : positions) {
-            if (!preferredPlantSpots.contains(position)) {
+            if (isPreferred(position)){
+                nearPlants.replace(position, nearPlants.get(position) + 1);
+            }
+            else if (!isPreferred(position) && plants.containsKey(position)) {
+                nearPlants.put(position, 1);
+            }
+            else {
                 preferredPlantSpots.add(position);
                 neutralPlantSpots.remove(position);
-            }
-            if (nearPlants.containsKey(position)) {
-                nearPlants.replace(position, nearPlants.get(position) + 1);
-            } else {
                 nearPlants.put(position, 1);
             }
         }
@@ -84,5 +88,12 @@ public class JungleMap extends AbstractWorldMap{
             }
 
         }
+    }
+
+    @Override
+    public Set<Vector2d> preferredSpots() {
+        Set<Vector2d> preferredSpots = super.preferredSpots();
+//        preferredSpots.removeAll(plants.keySet());
+        return preferredSpots;
     }
 }

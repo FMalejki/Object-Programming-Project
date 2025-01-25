@@ -8,9 +8,10 @@ public class BasicMap extends AbstractWorldMap {
 
     private Boundary jungleBonds;
 
-    public BasicMap(int width, int height, GamePresenter presenter) {
-        super(width, height, presenter);
+    public BasicMap(int width, int height) {
+        super(width, height);
         this.initializeJungle();
+        setPreferedPlantFields(width, height);
     }
 
     private void initializeJungle() {
@@ -23,6 +24,19 @@ public class BasicMap extends AbstractWorldMap {
         lowerBound = new Vector2d(0, (height - jungleHeight) / 2);
         upperBound = new Vector2d(upperBound.getX(), lowerBound.getY() + jungleHeight - 1);
         jungleBonds = new Boundary(lowerBound, upperBound);
+    }
+
+    private void setPreferedPlantFields(int width, int height) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (isPreferred(new Vector2d(x, y))) {
+                    preferredPlantSpots.add(new Vector2d(x, y));
+                }
+                else {
+                    neutralPlantSpots.add(new Vector2d(x, y));
+                }
+            }
+        }
     }
 
     @Override

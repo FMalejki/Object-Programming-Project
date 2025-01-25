@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -54,6 +51,9 @@ public class GameMenuPresenter {
     private Button saveConfig;
     @FXML
     private CheckBox saveDailyStats;
+    @FXML
+    private Label incorrectConfigLabel;
+
 
     public GameMenuPresenter() {
     }
@@ -85,7 +85,7 @@ public class GameMenuPresenter {
         c = c + "," + plantsPerDay.getText();
         c = c + "," + energyFromEating.getText();
         c = c + "," + startingAnimalCount.getText();
-        c = c + ", " + startingEnergyAmount.getText();
+        c = c + "," + startingEnergyAmount.getText();
         c = c + "," + energyForReproduction.getText();
         c = c + "," + reproductionCost.getText();
         c = c + "," + minMutations.getText();
@@ -113,33 +113,45 @@ public class GameMenuPresenter {
         animalVariant.setValue(config[13]);
     }
 
-    private WorldMap pickMap(Configuration config, GamePresenter presenter) {
+    private WorldMap pickMap(Configuration config) {
         return switch (config.mapVariant()) {
-            case "BasicMap" -> new BasicMap(config.width(), config.height(), presenter);
-            case "JungleMap" -> new JungleMap(config.width(), config.height(), presenter);
-            default -> new BasicMap(config.width(), config.height(), presenter);
+            case "BasicMap" -> new BasicMap(config.width(), config.height());
+            case "JungleMap" -> new JungleMap(config.width(), config.height());
+            default -> new BasicMap(config.width(), config.height());
         };
     }
 
     public void onClickStart() throws IOException {
-        Configuration config = parseConfiguration();
-        GamePresenter presenter = prepareStage();
-        WorldMap map = pickMap(config, presenter);
-        presenter.setWorldMap(map);
-        Simulation simulation = new Simulation(config, map);
-        simulation.run();
+        if (validateConfig()) {
+            incorrectConfigLabel.setVisible(false);
+            Configuration config = parseConfiguration();
+            GamePresenter presenter = prepareStage();
+            WorldMap map = pickMap(config);
+            map.setPresenter(presenter);
+            presenter.setWorldMap(map);
+            presenter.setConfig(config);
+            Simulation simulation = new Simulation(config, map);
+            if (saveDailyStats.isSelected()) {
+                simulation.setExportCSV(true);
+            }
+            presenter.setSimulation(simulation);
+            presenter.startSimulation(simulation);
+        }
     }
 
     public void onClickSaveConfig() throws IOException {
-        FileChooser fileChooser = new FileChooser();
-        File configs = new File("src/main/resources/Configurations/");
-        fileChooser.setInitialDirectory(configs);
-        Stage stage = (Stage) saveConfig.getScene().getWindow();
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null) {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(parseSaveFile());
-            writer.close();
+        if (validateConfig()) {
+            incorrectConfigLabel.setVisible(false);
+            FileChooser fileChooser = new FileChooser();
+            File configs = new File("src/main/resources/Configurations/");
+            fileChooser.setInitialDirectory(configs);
+            Stage stage = (Stage) saveConfig.getScene().getWindow();
+            File file = fileChooser.showSaveDialog(stage);
+            if (file != null) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer.write(parseSaveFile());
+                writer.close();
+            }
         }
     }
 
@@ -169,6 +181,9 @@ public class GameMenuPresenter {
         BorderPane viewRoot = loader.load();
         GamePresenter presenter = loader.getController();
         configureStage(primaryStage, viewRoot);
+        primaryStage.setOnCloseRequest(event -> {
+            presenter.windowClosed();
+        });
         primaryStage.show();
         return presenter;
     }
@@ -179,5 +194,64 @@ public class GameMenuPresenter {
         primaryStage.setTitle("Darwin World");
         primaryStage.minWidthProperty().bind(viewRoot.minWidthProperty());
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
+
+    }
+
+    private boolean validateConfig() {
+        boolean valid = true;
+        try {
+            int val1 = Integer.parseInt(width.getText());
+            if (val1 <= 0) {
+                throw new NumberFormatException();
+            }
+            int val2 = Integer.parseInt(height.getText());
+            if (val2 <= 0) {
+                throw new NumberFormatException();
+            }
+            int val3 = Integer.parseInt(startingAnimalCount.getText());
+            if (val3 < 0) {
+                throw new NumberFormatException();
+            }
+            int val4 = Integer.parseInt(startingPlantCount.getText());
+            if (val4 < 0) {
+                throw new NumberFormatException();
+            }
+            int val5 = Integer.parseInt(startingEnergyAmount.getText());
+            if (val5 <= 0) {
+                throw new NumberFormatException();
+            }
+            int val6 = Integer.parseInt(plantsPerDay.getText());
+            if (val6 < 0) {
+                throw new NumberFormatException();
+            }
+            int val7 = Integer.parseInt(energyFromEating.getText());
+            if (val7 < 0) {
+                throw new NumberFormatException();
+            }
+            int val8 = Integer.parseInt(reproductionCost.getText());
+            if (val8 <= 0) {
+                throw new NumberFormatException();
+            }
+            int val9 = Integer.parseInt(energyForReproduction.getText());
+            if (val9 < val8) {
+                throw new NumberFormatException();
+            }
+            int val10 = Integer.parseInt(minMutations.getText());
+            if (val10 < 0) {
+                throw new NumberFormatException();
+            }
+            int val11 = Integer.parseInt(maxMutations.getText());
+            if (val11 < val10) {
+                throw new NumberFormatException();
+            }
+            int val12 = Integer.parseInt(genomeLength.getText());
+            if (val12 < val11 || val12 == 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            incorrectConfigLabel.setVisible(true);
+            valid = false;
+        }
+        return valid;
     }
 }
