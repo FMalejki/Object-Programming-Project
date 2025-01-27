@@ -11,8 +11,6 @@ public class GameStats {
     private float avgChildren;
     private List<List<Integer>> genotypes;
 
-    public GameStats() {}
-
     public GameStats(int allAnimals, int allPlants, int freeFields, int totalEnergy, float avgLifespan, int totalChildren, List<List<Integer>> genotypes) {
         this.allAnimals = allAnimals;
         this.allPlants = allPlants;
@@ -68,15 +66,15 @@ public class GameStats {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("All Animals:\n"  + allAnimals + "\n");
-        sb.append("All Plants:\n"  + allPlants + "\n");
-        sb.append("Free Fields:\n"  + freeFields + "\n");
-        sb.append("Avg Energy:\n"  + avgEnergy + "\n");
-        sb.append("Avg Lifespan:\n"  + avgLifespan + "\n");
-        sb.append("Avg Children:\n"  + avgChildren + "\n");
+        sb.append("All Animals:\n").append(allAnimals).append("\n");
+        sb.append("All Plants:\n").append(allPlants).append("\n");
+        sb.append("Free Fields:\n").append(freeFields).append("\n");
+        sb.append("Avg Energy:\n").append(avgEnergy).append("\n");
+        sb.append("Avg Lifespan:\n").append(avgLifespan).append("\n");
+        sb.append("Avg Children:\n").append(avgChildren).append("\n");
         sb.append("Genotypes:\n");
         for (List<Integer> genotype : genotypes) {
-            sb.append(genotype.toString() + "\n");
+            sb.append(genotype.toString()).append("\n");
         }
         return sb.toString();
     }

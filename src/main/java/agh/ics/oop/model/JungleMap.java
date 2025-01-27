@@ -93,7 +93,6 @@ public class JungleMap extends AbstractWorldMap{
     @Override
     public Set<Vector2d> preferredSpots() {
         Set<Vector2d> preferredSpots = super.preferredSpots();
-//        preferredSpots.removeAll(plants.keySet());
         return preferredSpots;
     }
 }

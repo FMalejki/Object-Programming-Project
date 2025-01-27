@@ -14,11 +14,11 @@ public abstract class AbstractAnimal implements Animal {
     protected final List<Animal> parents = new ArrayList<>();
 
 
-    public AbstractAnimal(Vector2d startPosition, int startEnergy, Genotype genotype){
+    public AbstractAnimal(Vector2d startPosition, int startEnergy, Genotype genes){
         this.direction =  new Random().nextInt(8);
         this.position = startPosition;
         this.statistics = new AnimalStats(startEnergy);
-        this.genotype = genotype;
+        this.genotype = genes;
     }
 
     @Override
@@ -112,7 +112,6 @@ public abstract class AbstractAnimal implements Animal {
 
         Random random = new Random();
         int strongerSide = random.nextInt(2);
-        //0 - left
         int genotypeSize = stronger.getGenotype().size();
         int strongerSplice = (int)( Math.round(energyProportionStronger * genotypeSize) );
         List<Integer> childGenes = new ArrayList<>();
@@ -134,15 +133,15 @@ public abstract class AbstractAnimal implements Animal {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Genotype:\n"+genotype.getGenes().toString()+"\n");
-        sb.append("Active gene:\n"+genotype.getActiveGene()+"\n");
-        sb.append("Energy:\n"+statistics.getEnergy()+"\n");
-        sb.append("Eaten plants:\n"+statistics.getEatenPlants()+"\n");
-        sb.append("Children:\n"+statistics.getChildren()+"\n");
-        sb.append("Descendants:\n"+statistics.getDescendants()+"\n");
-        sb.append("Age:\n"+statistics.getAge()+"\n");
+        sb.append("Genotype:\n").append(genotype.getGenes().toString()).append("\n");
+        sb.append("Active gene:\n").append(genotype.getActiveGene()).append("\n");
+        sb.append("Energy:\n").append(statistics.getEnergy()).append("\n");
+        sb.append("Eaten plants:\n").append(statistics.getEatenPlants()).append("\n");
+        sb.append("Children:\n").append(statistics.getChildren()).append("\n");
+        sb.append("Descendants:\n").append(statistics.getDescendants()).append("\n");
+        sb.append("Age:\n").append(statistics.getAge()).append("\n");
         if (!isAlive()) {
-            sb.append("Date of death:\n" + statistics.getDateOfDeath() + "\n");
+            sb.append("Date of death:\n").append(statistics.getDateOfDeath()).append("\n");
         }
         return sb.toString();
     }
