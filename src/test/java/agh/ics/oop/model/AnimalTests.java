@@ -69,12 +69,12 @@ class AnimalTest {
         assertNotEquals(startPosition, newPosition);
     }
 
-    /*@Test
+    @Test
     void testReproduce() {
         animal.reproduce(partner, 50, 1, 3);
-        assertEquals(75, animal.getEnergy());
-        assertEquals(75, partner.getEnergy());
+        assertEquals(50, animal.getEnergy());
+        assertEquals(50, partner.getEnergy());
         assertEquals(1, animal.getChildren());
         assertEquals(1, partner.getChildren());
-    }*/
+    }
 }
