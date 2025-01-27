@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 class Genotype {
-    private List<Integer> genes;
+    private final List<Integer> genes;
     private int activeGeneIndex;
 
     public Genotype(List<Integer> genes) {
@@ -26,7 +26,7 @@ class Genotype {
             randomList.add(random.nextInt(8));
         }
 
-        return new ArrayList<Integer>(randomList);
+        return new ArrayList<>(randomList);
     }
 
     public int getActiveGene() {
