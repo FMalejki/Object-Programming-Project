@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class Genotype {
+public class Genotype {
     private final List<Integer> genes;
     private int activeGeneIndex;
 

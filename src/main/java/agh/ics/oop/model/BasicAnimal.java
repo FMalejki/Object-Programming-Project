@@ -2,10 +2,6 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class BasicAnimal extends AbstractAnimal {
 
     public BasicAnimal(Vector2d startPosition, int startEnergy, Genotype genotype) {

@@ -3,7 +3,6 @@ package agh.ics.oop.model;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -15,7 +14,7 @@ public class DarwinWorldApp extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("GameMenu.fxml"));
         BorderPane viewRoot = loader.load();
-        GameMenuPresenter presenter = loader.getController();
+        loader.getController();
         configureStage(primaryStage, viewRoot);
         primaryStage.show();
     }
