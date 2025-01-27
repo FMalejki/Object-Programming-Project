@@ -52,17 +52,6 @@ public class Vector2d {
         return other instanceof Vector2d;
     }
 
-//    public boolean equals(Object other) {
-//        //if( this == other ) return true;
-//        if (instanceofVector2d(other)) {
-//            Vector2d otherVec = (Vector2d) other;
-//            return this.x == otherVec.x && this.y == otherVec.y;
-//        } else {
-//            return false;
-//        }
-//    }
-//    equals other - simpler method
-
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
