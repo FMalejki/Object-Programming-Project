@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Configuration;
+import agh.ics.oop.model.util.Vector2d;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -119,7 +120,7 @@ public class GamePresenter {
             circle.setCenterX(size/2);
             circle.setCenterY(0.8*size/2);
             circle.setRadius(0.75*size/2);
-            if (trackedAnimal != null && animal.getPosition() == trackedAnimal.getPosition()) {
+            if (trackedAnimal != null && animal.position() == trackedAnimal.position()) {
                 circle.setFill(Color.PINK);
             }
             Rectangle rectangle = new Rectangle();
@@ -179,12 +180,12 @@ public class GamePresenter {
 
     public void onClickShowPreferredByPlants() {
         Set<Vector2d> preferredByPlants = worldMap.getPreferredPlantSpots();
-        preferredByPlants.stream().map(pos -> mapGrid.getChildren().get(pos.getX() * config.height() + pos.getY())).map(cell -> (ExtendedStackPane) cell).forEach(cell -> cell.setStyle("-fx-background-color: #57811f"));
+        preferredByPlants.stream().map(pos -> mapGrid.getChildren().get(pos.x() * config.height() + pos.y())).map(cell -> (ExtendedStackPane) cell).forEach(cell -> cell.setStyle("-fx-background-color: #57811f"));
 
     }
     public void onClickShowDominatingGenotype() {
         Set<Vector2d> positions = worldMap.dominatingGenotypePos();
-        positions.stream().map(pos -> mapGrid.getChildren().get(pos.getX() * config.height() + pos.getY())).map(cell -> (Circle) (((ExtendedStackPane) cell).getChildren().get(0))).forEach(circle -> {circle.setFill(javafx.scene.paint.Color.CYAN);});
+        positions.stream().map(pos -> mapGrid.getChildren().get(pos.x() * config.height() + pos.y())).map(cell -> (Circle) (((ExtendedStackPane) cell).getChildren().get(0))).forEach(circle -> {circle.setFill(javafx.scene.paint.Color.CYAN);});
     }
     public void statsChanged(String gStats) {
         Platform.runLater(() -> {generalStats.setText(gStats);

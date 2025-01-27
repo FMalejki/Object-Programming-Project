@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Vector2d;
 
 public class BasicAnimal extends AbstractAnimal {
 

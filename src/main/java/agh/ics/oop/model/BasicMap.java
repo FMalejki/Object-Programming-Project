@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Plant;
+import agh.ics.oop.model.util.Vector2d;
 
 import java.util.Random;
 
@@ -11,22 +13,23 @@ public class BasicMap extends AbstractWorldMap {
     public BasicMap(int width, int height) {
         super(width, height);
         this.initializeJungle();
-        setPreferedPlantFields(width, height);
+        setPreferredPlantFields(width, height);
     }
 
     private void initializeJungle() {
         Vector2d lowerBound = boundary.start();
         Vector2d upperBound = boundary.end();
-        int height = upperBound.getY() - lowerBound.getY() + 1;
+        int height = upperBound.y() - lowerBound.y() + 1;
         int jungleHeight = height/5;
-        if (0.2 - (float) jungleHeight/height > 0.2 - (float) (jungleHeight + 1)/height) {}
+        if (0.2 - (float) jungleHeight/height > 0.2 - (float) (jungleHeight + 1)/height) {
             jungleHeight += 1;
+        }
         lowerBound = new Vector2d(0, (height - jungleHeight) / 2);
-        upperBound = new Vector2d(upperBound.getX(), lowerBound.getY() + jungleHeight - 1);
+        upperBound = new Vector2d(upperBound.x(), lowerBound.y() + jungleHeight - 1);
         jungleBonds = new Boundary(lowerBound, upperBound);
     }
 
-    private void setPreferedPlantFields(int width, int height) {
+    private void setPreferredPlantFields(int width, int height) {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (isPreferred(new Vector2d(x, y))) {

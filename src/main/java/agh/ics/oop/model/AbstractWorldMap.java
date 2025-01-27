@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Plant;
+import agh.ics.oop.model.util.Vector2d;
 
 import java.util.HashMap;
 import java.util.*;
@@ -65,7 +67,7 @@ public abstract class AbstractWorldMap implements WorldMap {
 
 
     public void placeAnimal(Animal animal) {
-        Vector2d position = animal.getPosition();
+        Vector2d position = animal.position();
         if (!animals.containsKey(position)) {
             animals.put(position, new ArrayList<>());
         }
@@ -76,7 +78,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         for (Animal animal : deadAnimals) {
             totalDeadAnimals++;
             deadAnimalAgeSum += animal.getAge();
-            Vector2d position = animal.getPosition();
+            Vector2d position = animal.position();
             animals.get(position).remove(animal);
             if (animals.get(position).isEmpty()) {
                 animals.remove(position);
@@ -89,7 +91,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         List<Animal> newPositions = new ArrayList<>();
         List<Vector2d> toRemoveFields = new ArrayList<>();
         for (List<Animal> oneField : animals.values()) {
-            Vector2d position = oneField.getFirst().getPosition();
+            Vector2d position = oneField.getFirst().position();
             List<Animal> toRemoveAnimals = new ArrayList<>();
             for (Animal animal : oneField) {
                 if (animal.getEnergy() > 0) {
@@ -167,8 +169,8 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     public int countFreeFields() {
         int cnt = 0;
-        for (int x = 0; x < boundary.end().getX()+1; x++) {
-            for (int y = 0; y < boundary.end().getY()+1; y++) {
+        for (int x = 0; x < boundary.end().x()+1; x++) {
+            for (int y = 0; y < boundary.end().y()+1; y++) {
                 Vector2d position = new Vector2d(x, y);
                 if (!(animals.containsKey(position) || plants.containsKey(position))) {
                     cnt++;

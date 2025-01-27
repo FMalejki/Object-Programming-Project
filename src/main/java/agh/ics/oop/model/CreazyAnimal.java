@@ -1,10 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import agh.ics.oop.model.util.Vector2d;
 
 public class CreazyAnimal extends AbstractAnimal {
 

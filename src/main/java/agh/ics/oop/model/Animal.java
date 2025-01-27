@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Vector2d;
 
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,7 @@ public interface Animal extends WorldElement {
     AnimalStats getStats();
 
     @Override
-    Vector2d getPosition();
+    Vector2d position();
 
     Boolean isAt(Vector2d vector2d);
 

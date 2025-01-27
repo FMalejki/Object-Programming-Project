@@ -1,5 +1,8 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.util.Plant;
+import agh.ics.oop.model.util.Vector2d;
+
 import java.util.*;
 
 public class JungleMap extends AbstractWorldMap{
@@ -18,14 +21,14 @@ public class JungleMap extends AbstractWorldMap{
 
     public List<Vector2d> getSurroundings(Vector2d position){
         List<Vector2d> surroundings = List.of(
-                new Vector2d(position.getX()-1, position.getY()-1),
-                new Vector2d(position.getX(), position.getY()-1),
-                new Vector2d(position.getX()+1, position.getY()-1),
-                new Vector2d(position.getX()+1, position.getY()),
-                new Vector2d(position.getX()+1, position.getY()+1),
-                new Vector2d(position.getX(), position.getY()+1),
-                new Vector2d(position.getX()-1, position.getY()+1),
-                new Vector2d(position.getX()-1, position.getY()));
+                new Vector2d(position.x()-1, position.y()-1),
+                new Vector2d(position.x(), position.y()-1),
+                new Vector2d(position.x()+1, position.y()-1),
+                new Vector2d(position.x()+1, position.y()),
+                new Vector2d(position.x()+1, position.y()+1),
+                new Vector2d(position.x(), position.y()+1),
+                new Vector2d(position.x()-1, position.y()+1),
+                new Vector2d(position.x()-1, position.y()));
         return surroundings.stream().filter(v -> v.follows(boundary.start())).filter(v -> v.precedes(boundary.end())).toList();
     }
 

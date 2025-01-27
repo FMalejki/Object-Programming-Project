@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Configuration;
+import agh.ics.oop.model.util.Vector2d;
 
 import java.io.*;
 import java.time.LocalDateTime;

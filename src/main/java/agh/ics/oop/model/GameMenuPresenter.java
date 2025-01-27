@@ -1,8 +1,6 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Configuration;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,7 +10,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.List;
 
 public class GameMenuPresenter {
     @FXML

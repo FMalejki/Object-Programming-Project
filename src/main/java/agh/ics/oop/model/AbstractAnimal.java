@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.util.Boundary;
+import agh.ics.oop.model.util.Vector2d;
 
 import java.util.*;
 
@@ -44,7 +45,7 @@ public abstract class AbstractAnimal implements Animal {
     public AnimalStats getStats() {return statistics;}
 
     @Override
-    public Vector2d getPosition(){
+    public Vector2d position(){
         return this.position;
     }
 
@@ -83,16 +84,16 @@ public abstract class AbstractAnimal implements Animal {
         int gene = genotype.getActiveGene();
         int moveDirection = (direction + gene) % 8;
 
-        position = new Vector2d(position.getX() + dx[moveDirection], position.getY() + dy[moveDirection]);
-        if(position.getY() < boundary.start().getY() || position.getY() > boundary.end().getY()){
+        position = new Vector2d(position.x() + dx[moveDirection], position.y() + dy[moveDirection]);
+        if(position.y() < boundary.start().y() || position.y() > boundary.end().y()){
             moveDirection = (moveDirection + 4) % 8;
             position = position.add(new Vector2d(dx[moveDirection], dy[moveDirection]));
         }
-        if(position.getX() < boundary.start().getX()){
-            position = new Vector2d(boundary.end().getX(), position.getY());
+        if(position.x() < boundary.start().x()){
+            position = new Vector2d(boundary.end().x(), position.y());
         }
-        if(position.getX() > boundary.end().getX()){
-            position = new Vector2d(boundary.start().getX(), position.getY());
+        if(position.x() > boundary.end().x()){
+            position = new Vector2d(boundary.start().x(), position.y());
         }
 
         direction = moveDirection;
