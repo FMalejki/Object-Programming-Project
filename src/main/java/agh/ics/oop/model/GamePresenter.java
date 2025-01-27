@@ -1,8 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
 import agh.ics.oop.model.util.Configuration;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,8 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class GamePresenter {
@@ -40,12 +35,9 @@ public class GamePresenter {
     private WorldMap worldMap;
     private Configuration config;
     private boolean paused = false;
-    private Thread gameThread;
     private Simulation simulation;
     private Animal trackedAnimal = null;
     private ExtendedStackPane trackedPane = null;
-    private boolean trackingFields = false;
-    private boolean trackingGenes = false;
 
 
     public GamePresenter() {
@@ -66,7 +58,6 @@ public class GamePresenter {
     public void startSimulation(Simulation simulation) {
         simulation.switchPause();
         Thread newThread = new Thread(simulation);
-        gameThread = newThread;
         newThread.start();
     }
 
@@ -97,17 +88,17 @@ public class GamePresenter {
         if (trackedAnimal == animal) {
             trackedAnimal = null;
             trackedPane = null;
-            Circle circle = (Circle) pane.getChildren().get(0);
+            Circle circle = (Circle) pane.getChildren().getFirst();
             circle.setFill(Color.BLACK);
             Platform.runLater(this::resetTrackingText);
         }
         else {
             if (trackedPane != null) {
-                ((Circle) trackedPane.getChildren().get(0)).setFill(Color.BLACK);
+                ((Circle) trackedPane.getChildren().getFirst()).setFill(Color.BLACK);
             }
             trackedAnimal = animal;
             trackedPane = pane;
-            ((Circle) pane.getChildren().get(0)).setFill(Color.PINK);
+            ((Circle) pane.getChildren().getFirst()).setFill(Color.PINK);
             Platform.runLater(() -> trackedStats.setText(trackedAnimal.toString()));
         }
     }
