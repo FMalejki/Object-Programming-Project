@@ -128,7 +128,38 @@ public abstract class AbstractAnimal implements Animal {
     }
 
 
-    public abstract Animal reproduce(Animal partner, int reproductionCost, int minMutations, int maxMutations);
+    @Override
+    public Animal reproduce(Animal partner, int reproductionCost, int minMutations, int maxMutations) {
+        double energyProportionThis = (double) this.getEnergy() / (partner.getEnergy() + this.getEnergy());
+        double energyProportionOther = 1 - energyProportionThis;
+
+        List<Integer> childGenes;
+        if (energyProportionThis > energyProportionOther) {
+            childGenes = splitChildGenes(this, partner, energyProportionThis, energyProportionOther);
+        } else {
+            childGenes = splitChildGenes(partner, this, energyProportionOther, energyProportionThis);
+        }
+
+        int energyToChild = reproductionCost * 2;
+        partner.getStats().setEnergy(partner.getEnergy() - reproductionCost);
+        this.statistics.setEnergy(this.statistics.getEnergy() - reproductionCost);
+
+        Genotype childGenotype = new Genotype(childGenes);
+        childGenotype.mutate(maxMutations, minMutations);
+
+        Animal child = createChild(this.position, energyToChild, childGenotype, partner);
+
+        this.statistics.incrementChildren();
+        partner.getStats().incrementChildren();
+
+        Set<Animal> ancestors = new HashSet<>();
+        child.updateDescendants(ancestors);
+        ancestors.forEach(Animal::incrementDescendants);
+
+        return child;
+    }
+
+    protected abstract Animal createChild(Vector2d position, int energyToChild, Genotype genotype, Animal partner);
 
     @Override
     public String toString() {

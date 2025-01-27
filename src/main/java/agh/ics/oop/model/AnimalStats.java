@@ -1,7 +1,5 @@
 package agh.ics.oop.model;
 
-import java.util.List;
-
 public class AnimalStats {
     private int energy;
     private int eatenPlants = 0;
@@ -48,12 +46,8 @@ public class AnimalStats {
     public void incrementAge() {
         this.age += 1;
     }
-    public boolean isAlive() {
-        return alive;
-    }
-    public int getDateOfDeath() {
-        return dateOfDeath;
-    }
+    public boolean isAlive() {return alive;}
+    public int getDateOfDeath() {return dateOfDeath;}
     public void kill(int date) {
         this.alive = false;
         this.dateOfDeath = date;

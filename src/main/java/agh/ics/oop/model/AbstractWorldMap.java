@@ -85,12 +85,11 @@ public abstract class AbstractWorldMap implements WorldMap {
         deadAnimals.clear();
     }
 
-    //Przy założeniu, że ruch pobiera 1 energii
     public void moveAnimals() {
         List<Animal> newPositions = new ArrayList<>();
         List<Vector2d> toRemoveFields = new ArrayList<>();
         for (List<Animal> oneField : animals.values()) {
-            Vector2d position = oneField.get(0).getPosition();
+            Vector2d position = oneField.getFirst().getPosition();
             List<Animal> toRemoveAnimals = new ArrayList<>();
             for (Animal animal : oneField) {
                 if (animal.getEnergy() > 0) {
@@ -234,7 +233,7 @@ public abstract class AbstractWorldMap implements WorldMap {
         if (dominating.isEmpty()) {
             return Collections.emptySet();
         }
-        List<Integer> top = dominating.get(0);
+        List<Integer> top = dominating.getFirst();
         Set<Vector2d> positions = new HashSet<>();
         for (Vector2d position : animals.keySet()) {
             for (Animal animal : animals.get(position)) {

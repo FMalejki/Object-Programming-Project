@@ -19,33 +19,7 @@ public class BasicAnimal extends AbstractAnimal {
     }
 
     @Override
-    public Animal reproduce(Animal partner, int reproductionCost, int minMutations, int maxMutations) {
-        double energyProportionThis = (double)this.getEnergy()/(partner.getEnergy()+this.getEnergy());
-        double energyProporionOther = 1 - energyProportionThis;
-        List<Integer> childGenes;
-
-        if(energyProportionThis > energyProporionOther){
-            childGenes = splitChildGenes(this, partner, energyProportionThis, energyProporionOther);
-        }
-        else{
-            childGenes = splitChildGenes(partner, this, energyProporionOther, energyProportionThis);
-        }
-
-        int energyToChild = reproductionCost*2;
-        partner.getStats().setEnergy(partner.getEnergy()-reproductionCost);
-        this.statistics.setEnergy(this.statistics.getEnergy()-reproductionCost);
-
-        Genotype childGenotype = new Genotype(childGenes);
-        childGenotype.mutate(maxMutations, minMutations);
-
-        Animal child = new BasicAnimal(position, energyToChild, childGenotype);
-        child.setParents(this, partner);
-
-        statistics.incrementChildren();
-        partner.getStats().incrementChildren();
-        Set<Animal> ancestors = new HashSet<>();
-        child.updateDescendants(ancestors);
-        ancestors.forEach(Animal::incrementDescendants);
-        return child;
+    protected Animal createChild(Vector2d position, int energyToChild, Genotype genotype, Animal partner) {
+        return new CreazyAnimal(position, energyToChild, genotype);
     }
 }
